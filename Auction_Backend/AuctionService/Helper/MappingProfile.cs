@@ -8,7 +8,9 @@ namespace AuctionService.Helper
     {
         public MappingProfile()
         {
-            CreateMap<Auction, AuctionDto>().IncludeMembers(x => x.Item);
+            CreateMap<Auction, AuctionDto>()
+                .IncludeMembers(x => x.Item)
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.AuctionId));
             CreateMap<Item, AuctionDto>();
             CreateMap<CreateAuctionDto, Auction>()
                 .ForMember(d => d.Item, o => o.MapFrom(s => s));

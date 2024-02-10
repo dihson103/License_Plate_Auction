@@ -16,9 +16,9 @@ namespace AuctionService.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllAuction()
+        public IActionResult GetAllAuction(string updateAt)
         {
-            var auctions = _auctionService.GetAll();
+            var auctions = _auctionService.Get(updateAt);
             return Ok(auctions);
         }
 
@@ -33,7 +33,7 @@ namespace AuctionService.Controllers
         public async Task<IActionResult> CreateAuction([FromBody] CreateAuctionDto createAuctionDto)
         {
             var auctionDto = await _auctionService.CreateAuction(createAuctionDto);
-            return CreatedAtAction(nameof(GetAuction), new { id = auctionDto.AuctionId }, auctionDto);
+            return CreatedAtAction(nameof(GetAuction), new { id = auctionDto.Id }, auctionDto);
         }
 
         [HttpPut("{id}")]

@@ -16,18 +16,60 @@ namespace SearchService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string keyword)
+        public async Task<IActionResult> Get([FromQuery] SearchParam searchParam)
         {
-            var results = await _client.SearchAsync<Auction>(
-                s => s.Query(
-                    q => q.QueryString(
-                        d => d.Query('*'+keyword+'*')
-                    )
-                 ).Size(100)
-             ); 
+            // Calculate the number of documents to skip based on the page number and page size
+            int skip = (searchParam.Page - 1) * searchParam.PageSize;
 
-            return Ok(results.Documents.ToList());
+            var searchDescriptor = new SearchDescriptor<Auction>()
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(m =>
+                        {
+                            // Add search conditions based on the provided parameters
+                            var conditions = new List<Func<QueryContainerDescriptor<Auction>, QueryContainer>>();
+                            if (!string.IsNullOrEmpty(searchParam.LisensePlate))
+                                conditions.Add(mq => mq.QueryString(qs => qs.Query('*' + searchParam.LisensePlate + '*')));
+                            if (!string.IsNullOrEmpty(searchParam.City))
+                                conditions.Add(mq => mq.Match(m => m.Field(f => f.City).Query(searchParam.City)));
+                            if (!string.IsNullOrEmpty(searchParam.KindOfCar))
+                                conditions.Add(mq => mq.Match(m => m.Field(f => f.KindOfCar).Query(searchParam.KindOfCar)));
+                            if (!string.IsNullOrEmpty(searchParam.LicenseType))
+                                conditions.Add(mq => mq.Match(m => m.Field(f => f.LicenseType).Query(searchParam.LicenseType)));
+
+                            // Combine all conditions with 'must' operator
+                            return m.Bool(bq => bq.Must(conditions.ToArray()));
+                        })
+                    )
+                )
+                .From(skip) // Number of documents to skip
+                .Size(searchParam.PageSize); // Number of documents to return per page
+
+            var searchResponse = await _client.SearchAsync<Auction>(searchDescriptor);
+
+            if (!searchResponse.IsValid)
+            {
+                return BadRequest("Failed to fetch auctions");
+            }
+
+            // Extract the documents from the search response
+            var auctions = searchResponse.Documents.ToList();
+
+            // Calculate the total number of pages
+            long totalHits = searchResponse.Total;
+            int totalPages = (int)Math.Ceiling((double)totalHits / searchParam.PageSize);
+
+            // Create a custom response object to include both search results and total pages
+            var response = new
+            {
+                TotalPages = totalPages,
+                CurrentPage = searchParam.Page,
+                Results = auctions
+            };
+
+            return Ok(response);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)

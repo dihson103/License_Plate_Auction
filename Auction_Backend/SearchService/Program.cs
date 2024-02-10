@@ -1,4 +1,6 @@
 using SearchService.Extensions;
+using SearchService.Repositories;
+using SearchService.Services;
 
 namespace SearchService
 {
@@ -16,6 +18,7 @@ namespace SearchService
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddElasticSearch(builder.Configuration);
+            builder.Services.AddHttpClient<AuctionServiceHttpClient>();
 
             var app = builder.Build();
 
@@ -28,8 +31,16 @@ namespace SearchService
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            try
+            {
+                DbInitializer.InitDb(app);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
             app.Run();
         }

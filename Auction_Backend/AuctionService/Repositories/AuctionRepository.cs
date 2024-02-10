@@ -50,5 +50,11 @@ namespace AuctionService.Repositories
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
+
+        public async Task<List<Auction>> GetAuctionUpdatedByUpdateDate(string updateAt)
+        {
+            return await _context.Auctions.Where(x => 
+            x.UpdateAt.CompareTo(DateTime.Parse(updateAt).ToUniversalTime()) > 0).ToListAsync();
+        }
     }
 }

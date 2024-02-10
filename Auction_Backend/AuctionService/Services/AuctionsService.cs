@@ -53,11 +53,20 @@ namespace AuctionService.Services
             }
         }
 
-        public List<AuctionDto> GetAll()
+        public List<AuctionDto> Get(string updateAt)
         {
-            var auctions = _repository.GetAll();
+            List<Auction> auctions = null;
 
-            if(auctions.Any())
+            if(updateAt != null)
+            {
+                auctions = _repository.GetAuctionUpdatedByUpdateDate(updateAt).Result;
+            }
+            else
+            {
+                auctions = _repository.GetAll();
+            }
+
+            if (auctions.Any())
             {
                 return _mapper.Map<List<AuctionDto>>(auctions);
             }
