@@ -45,6 +45,15 @@ services:
     networks:
       - backend
 
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - backend
+
 volumes:
   pgdata:
   elasticsearch-data:

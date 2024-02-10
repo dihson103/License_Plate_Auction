@@ -3,6 +3,7 @@ using AuctionService.Repositories;
 using AuctionService.Repositories.Abstract;
 using AuctionService.Services;
 using AuctionService.Services.Abstract;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService
@@ -29,6 +30,14 @@ namespace AuctionService
 
             builder.Services.AddScoped<IAuctionService, AuctionsService>();
             builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
+
+            builder.Services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             var app = builder.Build();
 

@@ -1,6 +1,9 @@
+using MassTransit;
 using SearchService.Extensions;
+using SearchService.MiddleWares;
 using SearchService.Repositories;
 using SearchService.Services;
+using SearchService.Services.Interfaces;
 
 namespace SearchService
 {
@@ -20,6 +23,17 @@ namespace SearchService
             builder.Services.AddElasticSearch(builder.Configuration);
             builder.Services.AddHttpClient<AuctionServiceHttpClient>();
 
+            builder.Services.AddScoped<IAuctionService, AuctionService>();
+            builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
+
+            builder.Services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,6 +42,8 @@ namespace SearchService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthorization();
 
