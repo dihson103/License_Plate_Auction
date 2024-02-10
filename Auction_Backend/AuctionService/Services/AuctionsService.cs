@@ -4,6 +4,8 @@ using AuctionService.Exceptions;
 using AuctionService.Repositories.Abstract;
 using AuctionService.Services.Abstract;
 using AutoMapper;
+using Contracts;
+using MassTransit;
 using System.Net;
 
 namespace AuctionService.Services
@@ -12,10 +14,14 @@ namespace AuctionService.Services
     {
         private readonly IAuctionRepository _repository;
         private readonly IMapper _mapper;
-        public AuctionsService(IAuctionRepository repository, IMapper mapper)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public AuctionsService(
+            IAuctionRepository repository, IMapper mapper, IPublishEndpoint publishEndpoint
+            )
         {
             _repository = repository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)
@@ -29,7 +35,11 @@ namespace AuctionService.Services
                 throw new MyException((int)HttpStatusCode.BadRequest, "Create auction failed.");
             }
 
-            return _mapper.Map<AuctionDto>(auction);
+            var auctionDto = _mapper.Map<AuctionDto>(auction);
+
+            await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(auctionDto));
+
+            return auctionDto;
         }
 
         public async Task DeleteAuction(int id)
@@ -41,7 +51,7 @@ namespace AuctionService.Services
                 throw new MyException((int)HttpStatusCode.NotFound, $"Can not found auction has id: {id}");
             }
 
-            if(auction.Status != Status.InActive || auction.Status != Status.Pending)
+            if(auction.Status != Status.InActive && auction.Status != Status.Pending)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "This auction is was used.");
             }

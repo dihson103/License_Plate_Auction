@@ -1,4 +1,5 @@
 using MassTransit;
+using SearchService.Consumers;
 using SearchService.Extensions;
 using SearchService.MiddleWares;
 using SearchService.Repositories;
@@ -20,6 +21,8 @@ namespace SearchService
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             builder.Services.AddElasticSearch(builder.Configuration);
             builder.Services.AddHttpClient<AuctionServiceHttpClient>();
 
@@ -28,6 +31,10 @@ namespace SearchService
 
             builder.Services.AddMassTransit(x =>
             {
+                x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
+
+                x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.ConfigureEndpoints(context);
