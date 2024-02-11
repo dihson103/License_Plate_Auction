@@ -43,6 +43,8 @@ namespace AuctionService
                 });
 
                 x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
+                x.AddConsumersFromNamespaceContaining<AuctionDeletedFaultConsumer>();
+                x.AddConsumersFromNamespaceContaining<AuctionUpdatedFaultConsumer>();
 
                 x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
 

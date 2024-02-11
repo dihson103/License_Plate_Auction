@@ -9,6 +9,7 @@ namespace SearchService.Helpers
         public MappingProfile()
         {
             CreateMap<AuctionCreated, Auction>();
+            CreateMap<AuctionUpdated, Auction>();
         }
     }
 }

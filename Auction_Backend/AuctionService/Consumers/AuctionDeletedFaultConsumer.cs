@@ -3,11 +3,11 @@ using MassTransit;
 
 namespace AuctionService.Consumers
 {
-    public class AuctionCreatedFaultConsumer : IConsumer<Fault<AuctionCreated>>
+    public class AuctionDeletedFaultConsumer : IConsumer<Fault<AuctionDeleted>>
     {
-        public async Task Consume(ConsumeContext<Fault<AuctionCreated>> context)
+        public async Task Consume(ConsumeContext<Fault<AuctionDeleted>> context)
         {
-            Console.Error.WriteLine("---> Consuming faulty creating auction has id: " + context.Message.Message.Id);
+            Console.Error.WriteLine("---> Consuming faulty deleting auction has id " + context.Message.Message.Id);
 
             //var exception = context.Message.Exceptions.First();
 

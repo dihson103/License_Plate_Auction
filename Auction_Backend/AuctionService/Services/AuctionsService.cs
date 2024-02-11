@@ -59,6 +59,8 @@ namespace AuctionService.Services
                 throw new MyException((int)HttpStatusCode.BadRequest, "This auction is was used.");
             }
 
+            await _publishEndpoint.Publish(new AuctionDeleted { Id = id });
+
             var isSuccess = await _repository.DeleteAuctionAsync(auction);
             if(!isSuccess)
             {
@@ -133,6 +135,8 @@ namespace AuctionService.Services
                 auction.StartDateTime = null;
                 auction.EndDateTime = null;
             }
+
+            await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
 
             var isSuccess = await _repository.UpdateAuctionAsync(auction);
             if (!isSuccess)
