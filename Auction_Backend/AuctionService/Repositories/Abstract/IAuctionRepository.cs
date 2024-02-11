@@ -11,5 +11,6 @@ namespace AuctionService.Repositories.Abstract
         Task<bool> UpdateAuctionAsync(Auction auction);
         Task<bool> DeleteAuctionAsync(Auction auction);
         Task<List<Auction>> GetAuctionUpdatedByUpdateDate(string updateAt);
+        Task<int> GetNewIdInserted();
     }
 }

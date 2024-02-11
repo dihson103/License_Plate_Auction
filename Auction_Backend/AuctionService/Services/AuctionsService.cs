@@ -6,6 +6,7 @@ using AuctionService.Services.Abstract;
 using AutoMapper;
 using Contracts;
 using MassTransit;
+using MassTransit.Transports;
 using System.Net;
 
 namespace AuctionService.Services
@@ -27,17 +28,19 @@ namespace AuctionService.Services
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)
         {
             var auction = _mapper.Map<Auction>(createAuctionDto);
-            
+
+            var newId = await _repository.GetNewIdInserted();
+            auction.AuctionId = newId;
+
+            var auctionDto = _mapper.Map<AuctionDto>(auction);
+            await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(auctionDto));
+
             var isSuccess = await _repository.CreateAuctionAsync(auction);
 
             if (!isSuccess)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Create auction failed.");
             }
-
-            var auctionDto = _mapper.Map<AuctionDto>(auction);
-
-            await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(auctionDto));
 
             return auctionDto;
         }

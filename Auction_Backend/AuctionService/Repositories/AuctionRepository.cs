@@ -1,5 +1,9 @@
-﻿using AuctionService.Entities;
+﻿using AuctionService.Dtos;
+using AuctionService.Entities;
 using AuctionService.Repositories.Abstract;
+using AutoMapper;
+using Contracts;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Repositories
@@ -31,6 +35,7 @@ namespace AuctionService.Repositories
         public async Task<bool> CreateAuctionAsync(Auction auction)
         {
             _context.Auctions.Add(auction);
+       
             var result = await _context.SaveChangesAsync();
 
             return result > 0;
@@ -55,6 +60,11 @@ namespace AuctionService.Repositories
         {
             return await _context.Auctions.Where(x => 
             x.UpdateAt.CompareTo(DateTime.Parse(updateAt).ToUniversalTime()) > 0).ToListAsync();
+        }
+
+        public async Task<int> GetNewIdInserted()
+        {
+            return await _context.Auctions.MaxAsync(x => x.AuctionId) + 1;
         }
     }
 }

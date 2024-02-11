@@ -17,6 +17,11 @@ namespace AuctionService.Helper
                 .ForMember(d => d.Item, o => o.MapFrom(s => s));
             CreateMap<CreateAuctionDto, Item>();
             CreateMap<AuctionDto, AuctionCreated>();
+
+            CreateMap<Auction, AuctionCreated>()
+                .IncludeMembers(x => x.Item)
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.AuctionId));
+            CreateMap<Item, AuctionCreated>();
         }
     }
 }
