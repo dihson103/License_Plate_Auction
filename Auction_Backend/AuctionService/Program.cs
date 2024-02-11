@@ -1,3 +1,4 @@
+using AuctionService.Consumers;
 using AuctionService.Middlewares;
 using AuctionService.Repositories;
 using AuctionService.Repositories.Abstract;
@@ -40,6 +41,10 @@ namespace AuctionService
                     o.UsePostgres();
                     o.UseBusOutbox();
                 });
+
+                x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
+
+                x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
