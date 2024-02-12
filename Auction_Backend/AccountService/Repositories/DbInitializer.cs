@@ -1,5 +1,6 @@
 ﻿using AccountService.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AccountService.Repositories
 {
@@ -57,6 +58,70 @@ namespace AccountService.Repositories
                 };
 
                 context.Admins.AddRange(admins);
+                context.SaveChanges();
+            }
+
+            if(context.Users.Any())
+            {
+                Console.WriteLine("Already has user data.");
+            }
+            else
+            {
+                var users = new List<UserAccount>
+                {
+                    new UserAccount
+                    {
+                        Id = "HE160021",
+                        Email = "dinhson1032001@gmail.com",
+                        FullName = "Nguyễn Đình Sơn",
+                        Password = "12345",
+                        Address = "Hà Nội",
+                        Status = true,
+                        BirthDate = DateTime.UtcNow
+                    },
+                    new UserAccount
+                    {
+                        Id = "HE160022",
+                        Email = "nkhuyen@gmail.com",
+                        FullName = "Nguyễn Khánh Huyền",
+                        Password = "12345",
+                        Address = "Hà Nội",
+                        Status = true,
+                        BirthDate = DateTime.UtcNow
+                    },
+                    new UserAccount
+                    {
+                        Id = "HE160023",
+                        Email = "chuthuylinh@gmail.com",
+                        FullName = "Chu Thùy Linh",
+                        Password = "12345",
+                        Address = "Hà Nội",
+                        Status = true,
+                        BirthDate = DateTime.UtcNow
+                    },
+                    new UserAccount
+                    {
+                        Id = "HE160024",
+                        Email = "maint@gmail.com",
+                        FullName = "Nguyễn Thị Mai",
+                        Password = "12345",
+                        Address = "Hà Nội",
+                        Status = true,
+                        BirthDate = DateTime.UtcNow
+                    },
+                    new UserAccount
+                    {
+                        Id = "HE160025",
+                        Email = "linhlinh@gmail.com",
+                        FullName = "Nguyễn Thị Linh",
+                        Password = "12345",
+                        Address = "Hà Nội",
+                        Status = true,
+                        BirthDate = DateTime.UtcNow
+                    }
+                };
+
+                context.Users.AddRange(users);
                 context.SaveChanges();
             }
         }

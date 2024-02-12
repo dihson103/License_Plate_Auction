@@ -29,6 +29,9 @@ namespace AccountService
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

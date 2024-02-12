@@ -1,4 +1,5 @@
 ﻿using AccountService.Dtos.Admin;
+using AccountService.Dtos.User;
 using AccountService.Entities;
 using AutoMapper;
 
@@ -10,7 +11,10 @@ namespace AccountService.Helper
         {
             CreateMap<AdminAccount, AdminDto>();
             CreateMap<CreateAdminDto, AdminAccount>();
-            CreateMap<UpdateAdminDto, AdminAccount>();
+
+            CreateMap<UserAccount, UserDto>();
+            CreateMap<CreateUserDto, UserAccount>();
+
         }
     }
 }
