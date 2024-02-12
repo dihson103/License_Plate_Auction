@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using AccountService.Dtos.Admin;
+using AccountService.Entities;
+using AutoMapper;
 
 namespace AccountService.Helper
 {
@@ -6,7 +8,9 @@ namespace AccountService.Helper
     {
         public MappingProfile()
         {
-
+            CreateMap<AdminAccount, AdminDto>();
+            CreateMap<CreateAdminDto, AdminAccount>();
+            CreateMap<UpdateAdminDto, AdminAccount>();
         }
     }
 }
