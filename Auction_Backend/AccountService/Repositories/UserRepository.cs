@@ -35,6 +35,13 @@ namespace AccountService.Repositories
             return await _context.Users.AnyAsync(x => x.Id == id);
         }
 
+        public async Task<UserAccount> LoginAsync(string username, string password)
+        {
+            return await _context.Users
+                .Where(x => x.Id == username || x.Email == username)
+                .FirstOrDefaultAsync(x => x.Password != null && x.Password == password);
+        }
+
         public async Task<(List<UserAccount>, int)> Search(UserSearchParam searchParam)
         {
             var query = _context.Users.AsQueryable();

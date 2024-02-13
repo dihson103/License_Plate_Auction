@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchService", "SearchServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{A2951BBE-2244-4E5C-8950-5F5D5A10F623}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountService", "AccountService\AccountService.csproj", "{AF71985B-550A-4C39-800D-E4A2CF2E93B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService", "AccountService\AccountService.csproj", "{AF71985B-550A-4C39-800D-E4A2CF2E93B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtAuthenticationManager", "JwtAuthenticationManager\JwtAuthenticationManager.csproj", "{46ADEC41-046B-477E-B1EB-28E1B77D756E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{AF71985B-550A-4C39-800D-E4A2CF2E93B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF71985B-550A-4C39-800D-E4A2CF2E93B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF71985B-550A-4C39-800D-E4A2CF2E93B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46ADEC41-046B-477E-B1EB-28E1B77D756E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46ADEC41-046B-477E-B1EB-28E1B77D756E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46ADEC41-046B-477E-B1EB-28E1B77D756E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46ADEC41-046B-477E-B1EB-28E1B77D756E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{373F332A-E0FC-4819-B1C0-E68B306058F7} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 		{A2951BBE-2244-4E5C-8950-5F5D5A10F623} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 		{AF71985B-550A-4C39-800D-E4A2CF2E93B9} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
+		{46ADEC41-046B-477E-B1EB-28E1B77D756E} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {011830C0-E983-4F5C-9A0E-F8774FCE0D63}

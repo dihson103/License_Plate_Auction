@@ -12,6 +12,5 @@ namespace AccountService.Entities
         public string FullName { get; set; }
         public string Password { get; set; }
 
-        public List<Token> Tokens { get; set; }
     }
 }

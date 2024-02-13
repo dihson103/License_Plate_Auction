@@ -2,6 +2,7 @@ using AccountService.Middlewares;
 using AccountService.Repositories;
 using AccountService.Services;
 using AccountService.Services.Abstract;
+using JwtAuthenticationManager.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountService
@@ -31,6 +32,8 @@ namespace AccountService
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddJwtAuthenticationManager(builder.Configuration);
 
             var app = builder.Build();
 

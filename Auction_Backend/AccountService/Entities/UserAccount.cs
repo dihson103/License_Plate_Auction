@@ -15,7 +15,5 @@ namespace AccountService.Entities
         public double Wallet { get; set; } = 0;
         public bool Status { get; set; }
 
-        public List<Token> Tokens { get; set; } 
-
     }
 }

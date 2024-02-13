@@ -1,9 +1,12 @@
-﻿using AccountService.Dtos.User;
+﻿using AccountService.Dtos.Auth;
+using AccountService.Dtos.User;
 using AccountService.Entities;
 using AccountService.Exceptions;
 using AccountService.Services.Abstract;
 using AutoMapper;
+using JwtAuthenticationManager.Abstractions;
 using System.Net;
+using System.Security.Claims;
 
 namespace AccountService.Services
 {
@@ -11,10 +14,12 @@ namespace AccountService.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        private readonly IJwtTokenService _jwtTokenService;
+        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenService jwtTokenService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _jwtTokenService = jwtTokenService;
         }
 
         public async Task<UserDto> Add(CreateUserDto userDto)
@@ -48,6 +53,32 @@ namespace AccountService.Services
             var user = await getUserById(id);
 
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<AuthResponse<UserDto>> Login(AuthRequest authRequest)
+        {
+            var user = await _userRepository.LoginAsync(authRequest.User, authRequest.Password);
+
+            if(user == null)
+            {
+                throw new MyException((int)HttpStatusCode.Unauthorized, "Wrong email or password.");
+            }
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("Email", user.Email)
+            };
+
+            var tokenGenerated = _jwtTokenService.GenerateTokens(claims);
+
+            return new AuthResponse<UserDto>
+            {
+                AccessToken = tokenGenerated.AccessToken,
+                RefreshToken = tokenGenerated.RefreshToken,
+                PublicKey = tokenGenerated.PublicKey,
+                Data = _mapper.Map<UserDto>(user)
+            };
         }
 
         public async Task<UserSearchResponse> Search(UserSearchParam searchParam)

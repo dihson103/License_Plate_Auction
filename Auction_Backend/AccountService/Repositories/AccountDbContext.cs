@@ -12,6 +12,5 @@ namespace AccountService.Repositories
 
         public DbSet<UserAccount> Users { get; set; }
         public DbSet<AdminAccount> Admins { get; set; }
-        public DbSet<Token> Tokens { get; set; }
     }
 }

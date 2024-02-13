@@ -3,6 +3,7 @@ using System;
 using AccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AccountService.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    partial class AccountDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240212074343_FixMigration")]
+    partial class FixMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +45,38 @@ namespace AccountService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("AccountService.Entities.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CurrentPrivateKey")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsAccescToken")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JwtToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("AccountService.Entities.UserAccount", b =>
@@ -73,6 +108,33 @@ namespace AccountService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AccountService.Entities.Token", b =>
+                {
+                    b.HasOne("AccountService.Entities.AdminAccount", "AdminAccount")
+                        .WithMany("Tokens")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AccountService.Entities.UserAccount", "UserAccount")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AdminAccount");
+
+                    b.Navigation("UserAccount");
+                });
+
+            modelBuilder.Entity("AccountService.Entities.AdminAccount", b =>
+                {
+                    b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("AccountService.Entities.UserAccount", b =>
+                {
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }
