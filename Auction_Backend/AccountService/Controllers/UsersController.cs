@@ -55,12 +55,5 @@ namespace AccountService.Controllers
             await _userService.UpdateUserEmail(id, updateUserEmailDto);
             return Ok();
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthRequest authRequest)
-        {
-            var result = await _userService.Login(authRequest);
-            return Ok(result);
-        }
     }
 }

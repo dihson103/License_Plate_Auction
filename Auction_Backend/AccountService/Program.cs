@@ -39,7 +39,7 @@ namespace AccountService
             builder.Services.AddRedisManager(builder.Configuration);
             builder.Services.AddJwtAuthenticationManager();
 
-            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             var app = builder.Build();
 

@@ -11,5 +11,6 @@ namespace AccountService.Services.Abstract
         Task<bool> Add(AdminAccount account);
         Task<bool> Update(AdminAccount account);
         Task<bool> IsEmailExist(string email);
+        Task<AdminAccount> GetByEmailAndPasswordAsync(string email, string password);
     }
 }

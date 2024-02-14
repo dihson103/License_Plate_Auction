@@ -28,6 +28,11 @@ namespace AccountService.Repositories
             return result > 0;
         }
 
+        public async Task<AdminAccount> GetByEmailAndPasswordAsync(string email, string password)
+        {
+            return await _context.Admins.FirstOrDefaultAsync(x => x.Email== email && x.Password == password);
+        }
+
         public async Task<AdminAccount> GetById(int id)
         {
             return await _context.Admins.FindAsync(id);

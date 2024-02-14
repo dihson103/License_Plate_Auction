@@ -25,6 +25,11 @@ namespace AccountService.Repositories
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<UserAccount> GetByIdOrEmailAsync(string value)
+        {
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email == value || x.Id == value);
+        }
+
         public async Task<bool> IsEmailExist(string email)
         {
             return await _context.Users.AnyAsync(x => x.Email == email);   
@@ -33,13 +38,6 @@ namespace AccountService.Repositories
         public async Task<bool> IsUserIdExist(string id)
         {
             return await _context.Users.AnyAsync(x => x.Id == id);
-        }
-
-        public async Task<UserAccount> LoginAsync(string username, string password)
-        {
-            return await _context.Users
-                .Where(x => x.Id == username || x.Email == username)
-                .FirstOrDefaultAsync(x => x.Password != null && x.Password == password);
         }
 
         public async Task<(List<UserAccount>, int)> Search(UserSearchParam searchParam)

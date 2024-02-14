@@ -10,25 +10,23 @@ namespace AccountService.Controllers
     [ApiController]
     public class AuthenticationsController : ControllerBase
     {
-        private readonly IUserService _userService;
         private readonly IAuthService _authService;
-        public AuthenticationsController(IUserService userService, IAuthService authService)
+        public AuthenticationsController(IAuthService authService)
         {
-            _userService = userService;
             _authService = authService;
         }
 
         [HttpPost]
         public async Task<IActionResult> UserLogin([FromBody] AuthRequest authRequest)
         {
-            var result = await _userService.Login(authRequest);
+            var result = await _authService.UserLoginAsync(authRequest);
             return Ok(result);
         }
 
         [HttpPost("admin")]
         public async Task<IActionResult> AdminLogin([FromBody] AuthRequest authRequest)
         {
-            var result = await _userService.Login(authRequest);
+            var result = await _authService.AdminLoginAsync(authRequest);
             return Ok(result);
         }
 
@@ -41,6 +39,15 @@ namespace AccountService.Controllers
             var tokens = await _authService.RefreshTokenAsync(user);
 
             return Ok(tokens);
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var user = HttpContext.User;
+            await _authService.LogoutAsync(user);
+
+            return Ok();
         }
     }
 }

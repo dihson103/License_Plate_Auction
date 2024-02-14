@@ -11,6 +11,6 @@ namespace AccountService.Services.Abstract
         Task<bool> Update(UserAccount userAccount);
         Task<bool> IsEmailExist(string email);
         Task<bool> IsUserIdExist(string id);
-        Task<UserAccount> LoginAsync(string username, string password);
+        Task<UserAccount> GetByIdOrEmailAsync(string value);
     }
 }

@@ -14,21 +14,15 @@ namespace AccountService.Services
 {
     public class UserService : IUserService
     {
-        private const string REDIS_TOKEN_INFO_PREFIX = "JwtToken-";
-
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IJwtTokenService _jwtTokenService;
-        private readonly IRedisService _redisService;
 
         public UserService(
-            IUserRepository userRepository, IMapper mapper, IJwtTokenService jwtTokenService, IRedisService redisService
+            IUserRepository userRepository, IMapper mapper
             )
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            _jwtTokenService = jwtTokenService;
-            _redisService = redisService;
         }
 
         public async Task<UserDto> Add(CreateUserDto userDto)
@@ -62,36 +56,6 @@ namespace AccountService.Services
             var user = await getUserById(id);
 
             return _mapper.Map<UserDto>(user);
-        }
-
-        public async Task<AuthResponse<UserDto>> Login(AuthRequest authRequest)
-        {
-            var user = await _userRepository.LoginAsync(authRequest.User, authRequest.Password);
-
-            if(user == null)
-            {
-                throw new MyException((int)HttpStatusCode.Unauthorized, "Wrong email or password.");
-            }
-
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("Email", user.Email)
-            };
-
-            var tokenGenerated = await _jwtTokenService.GenerateTokens(claims);
-
-            string redisKey = REDIS_TOKEN_INFO_PREFIX + user.Id;
-            await _redisService.RemoveAsync(redisKey);
-            await _redisService.SetAsync<Tokens>(redisKey, tokenGenerated);
-
-            return new AuthResponse<UserDto>
-            {
-                AccessToken = tokenGenerated.AccessToken,
-                RefreshToken = tokenGenerated.RefreshToken,
-                PublicKey = tokenGenerated.PublicKey,
-                Data = _mapper.Map<UserDto>(user)
-            };
         }
 
         public async Task<UserSearchResponse> Search(UserSearchParam searchParam)
