@@ -4,6 +4,9 @@ using AccountService.Services;
 using AccountService.Services.Abstract;
 using JwtAuthenticationManager.Extensions;
 using Microsoft.EntityFrameworkCore;
+using RedisManager;
+using JwtAuthenticationManager;
+using JwtAuthenticationManager.Middlewares;
 
 namespace AccountService
 {
@@ -33,7 +36,10 @@ namespace AccountService
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-            builder.Services.AddJwtAuthenticationManager(builder.Configuration);
+            builder.Services.AddRedisManager(builder.Configuration);
+            builder.Services.AddJwtAuthenticationManager();
+
+            builder.Services.AddSingleton<IAuthService, AuthService>();
 
             var app = builder.Build();
 
@@ -46,8 +52,10 @@ namespace AccountService
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseAuthorization();
+            app.UseMiddleware<JwtAuthenticationMiddleware>();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -1,4 +1,5 @@
 ﻿using JwtAuthenticationManager.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace JwtAuthenticationManager.Abstractions
 {
     public interface IJwtTokenService
     {
-        Tokens GenerateTokens(Claim[] claims);
+        Task<Tokens> GenerateTokens(Claim[] claims);
+        HeaderInfo GetTokenFromHeader(HttpContext context);
+        ClaimsPrincipal GetClaimsPrincipal(string tokenString, string publicKeyXml);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JwtAuthenticationManager.Abstractions;
 using JwtAuthenticationManager.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -14,20 +15,96 @@ namespace JwtAuthenticationManager.Services
 {
     public class JwtTokenService : IJwtTokenService
     {
-        private static readonly int ACCESS_TOKEN_VALIDITY_HOURS = 1;
-        private static readonly int REFRESH_TOKEN_VALIDITY_HOURS = 2;
+        private const int ACCESS_TOKEN_VALIDITY_HOURS = 1;
+        private const int REFRESH_TOKEN_VALIDITY_HOURS = 2;
+        private const string HEADER_AUTHENTICATION = "Authorization";
+        private const string HEADER_PUBLIC_KEY = "x-api-key";
 
-        public Tokens GenerateTokens(Claim[] claims)
+        public async Task<Tokens> GenerateTokens(Claim[] claims)
         {
             var keyPair = GenerateKey();
-            var accessToken = GenerateToken(keyPair.PrivateKey, ACCESS_TOKEN_VALIDITY_HOURS, claims);
-            var refreshToken = GenerateToken(keyPair.PrivateKey, REFRESH_TOKEN_VALIDITY_HOURS, claims);
+            var accessTokenTask = GenerateToken(keyPair.PrivateKey, ACCESS_TOKEN_VALIDITY_HOURS, claims);
+            var refreshTokenTask = GenerateToken(keyPair.PrivateKey, REFRESH_TOKEN_VALIDITY_HOURS, claims);
 
-            return new Tokens
+            await Task.WhenAll(accessTokenTask, refreshTokenTask);
+
+            // Retrieve the results
+            var accessToken = await accessTokenTask;
+            var refreshToken = await refreshTokenTask;
+
+            var tokens = new Tokens
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 PublicKey = keyPair.PublicKey
+            };
+
+            return tokens;
+        }
+
+        public ClaimsPrincipal GetClaimsPrincipal(string tokenString, string publicKeyXml)
+        {
+            // Load the public key
+            RSA publicKey = RSA.Create();
+            publicKey.FromXmlString(publicKeyXml); // Replace with your public key XML
+
+            // Create validation parameters using the public key
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireSignedTokens = true, // Require signed tokens
+                IssuerSigningKey = new RsaSecurityKey(publicKey)
+            };
+
+            // Validate JWT token using only the public key
+            var handler = new JwtSecurityTokenHandler();
+            var principal = handler.ValidateToken(tokenString, validationParameters, out var validatedToken);
+
+            return principal;
+        }
+
+        public HeaderInfo GetTokenFromHeader(HttpContext context)
+        {
+            if (!context.Request.Headers.ContainsKey(HEADER_AUTHENTICATION))
+            {
+                return new HeaderInfo
+                {
+                    IsNeedAuthenticate = false
+                };
+            }
+
+            if (!context.Request.Headers.ContainsKey(HEADER_PUBLIC_KEY))
+            {
+                return new HeaderInfo
+                {
+                    IsNeedAuthenticate = true
+                };
+            }
+
+            string token = context.Request.Headers[HEADER_AUTHENTICATION].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(token))
+            {
+                return new HeaderInfo
+                {
+                    IsNeedAuthenticate = true
+                };
+            }
+
+            string publicKey = context.Request.Headers[HEADER_PUBLIC_KEY].FirstOrDefault();
+            if (string.IsNullOrEmpty(publicKey))
+            {
+                return new HeaderInfo
+                {
+                    IsNeedAuthenticate = true
+                };
+            }
+
+            return new HeaderInfo
+            {
+                IsNeedAuthenticate = true,
+                Token = token,
+                PublicKey = publicKey
             };
         }
 
@@ -51,14 +128,8 @@ namespace JwtAuthenticationManager.Services
             }
         }
 
-        private string GenerateToken(string publicKeyXML, int expireTime, Claim[] claims)
+        private async Task<string> GenerateToken(string publicKeyXML, int expireTime, Claim[] claims)
         {
-            //var claims = new[]
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, "Nguyen-dinh-son"),
-            //    new Claim(ClaimTypes.Role, "ADMIN")
-            //};
-
             RSA publicKey = RSA.Create();
             publicKey.FromXmlString(publicKeyXML);
 
@@ -75,7 +146,7 @@ namespace JwtAuthenticationManager.Services
 
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenString;
+            return await Task.FromResult(tokenString);
         }
     }
 }

@@ -3,6 +3,7 @@ using AccountService.Dtos.User;
 using AccountService.Services.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AccountService.Controllers
 {

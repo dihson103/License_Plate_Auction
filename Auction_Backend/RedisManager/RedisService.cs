@@ -1,5 +1,4 @@
-﻿using JwtAuthenticationManager.Abstractions;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -8,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JwtAuthenticationManager.Services
+namespace RedisManager
 {
-    public class CacheService : ICacheService
+    public class RedisService : IRedisService
     {
         private static ConcurrentDictionary<string, bool> CacheKeys = new();
         private readonly IDistributedCache _distributedCache;
-        public CacheService(IDistributedCache distributedCache)
+        public RedisService(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
         }
@@ -22,7 +21,7 @@ namespace JwtAuthenticationManager.Services
         {
             var cacheValue = await _distributedCache.GetStringAsync(key, cancellationToken);
 
-            if(cacheValue is null)
+            if (cacheValue is null)
             {
                 return null;
             }
@@ -47,10 +46,10 @@ namespace JwtAuthenticationManager.Services
             await Task.WhenAll(tasks);
         }
 
-        public async Task SetAsync<T>(string key, string value, CancellationToken cancellationToken = default) where T : class
+        public async Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default) where T : class
         {
             string cacheValue = JsonConvert.SerializeObject(value);
-            
+
             await _distributedCache.SetStringAsync(key, cacheValue, cancellationToken);
 
             CacheKeys.TryAdd(key, false);

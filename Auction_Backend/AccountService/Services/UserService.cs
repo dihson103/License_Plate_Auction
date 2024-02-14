@@ -5,6 +5,8 @@ using AccountService.Exceptions;
 using AccountService.Services.Abstract;
 using AutoMapper;
 using JwtAuthenticationManager.Abstractions;
+using JwtAuthenticationManager.Models;
+using RedisManager;
 using System.Net;
 using System.Security.Claims;
 
@@ -12,14 +14,21 @@ namespace AccountService.Services
 {
     public class UserService : IUserService
     {
+        private const string REDIS_TOKEN_INFO_PREFIX = "JwtToken-";
+
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IJwtTokenService _jwtTokenService;
-        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenService jwtTokenService)
+        private readonly IRedisService _redisService;
+
+        public UserService(
+            IUserRepository userRepository, IMapper mapper, IJwtTokenService jwtTokenService, IRedisService redisService
+            )
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenService = jwtTokenService;
+            _redisService = redisService;
         }
 
         public async Task<UserDto> Add(CreateUserDto userDto)
@@ -70,7 +79,11 @@ namespace AccountService.Services
                 new Claim("Email", user.Email)
             };
 
-            var tokenGenerated = _jwtTokenService.GenerateTokens(claims);
+            var tokenGenerated = await _jwtTokenService.GenerateTokens(claims);
+
+            string redisKey = REDIS_TOKEN_INFO_PREFIX + user.Id;
+            await _redisService.RemoveAsync(redisKey);
+            await _redisService.SetAsync<Tokens>(redisKey, tokenGenerated);
 
             return new AuthResponse<UserDto>
             {
