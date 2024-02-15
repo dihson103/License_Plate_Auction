@@ -1,6 +1,7 @@
 ﻿using AccountService.Dtos.Auth;
 using AccountService.Dtos.User;
 using AccountService.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -27,6 +28,8 @@ namespace AccountService.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
+            var userId = HttpContext.Request.Headers["User-Id"];
+
             var result = await _userService.GetById(id);
             return Ok(result);
         }

@@ -47,7 +47,8 @@ namespace AccountService.Services
             var claims = new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()),
-                new Claim("Email", admin.Email)
+                new Claim("Email", admin.Email),
+                new Claim(ClaimTypes.Role, "ADMIN")
             };
 
             var tokens = await createTokensAsync(claims, admin.Id.ToString());
@@ -104,7 +105,8 @@ namespace AccountService.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim(ClaimTypes.Role, "USER")
             };
 
             var tokenGenerated = await createTokensAsync(claims, user.Id);

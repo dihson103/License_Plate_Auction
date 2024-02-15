@@ -22,7 +22,7 @@ namespace JwtAuthenticationManager.Middlewares
         public async Task Invoke(HttpContext context, IRedisService redis, IJwtTokenService tokenService)
         {
             var url = context.Request.Path.ToString();
-            if (url.StartsWith("/api/authentications/refresh-token"))
+            if (url.Contains("/authentications/refresh-token"))
             {
                 await _next(context);
                 return;
@@ -71,6 +71,8 @@ namespace JwtAuthenticationManager.Middlewares
                 }
 
                 context.User = principal;
+
+                context.Request.Headers.Add("User-Id", userId);
 
                 await _next(context);
             }

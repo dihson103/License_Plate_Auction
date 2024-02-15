@@ -51,8 +51,7 @@ namespace AccountService
             }
 
             app.UseMiddleware<ExceptionMiddleware>();
-
-            app.UseMiddleware<JwtAuthenticationMiddleware>();
+            //app.UseMiddleware<JwtAuthenticationMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();
