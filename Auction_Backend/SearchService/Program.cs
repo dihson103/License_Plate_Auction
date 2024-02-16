@@ -34,6 +34,8 @@ namespace SearchService
                 x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
                 x.AddConsumersFromNamespaceContaining<AuctionDeletedConsumer>();
                 x.AddConsumersFromNamespaceContaining<AuctionUpdatedConsumer>();
+                x.AddConsumersFromNamespaceContaining<AuctionFinishedConsumer>();
+                x.AddConsumersFromNamespaceContaining<BidPlacedConsumer>();
 
                 x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
 
