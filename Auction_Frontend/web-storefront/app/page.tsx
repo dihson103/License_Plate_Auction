@@ -1,3 +1,9 @@
+import ItemListing from './components/ItemListing'
+
 export default function Home() {
-  return <div className='text-3xl font-semibold'>Lisense auction</div>
+  return (
+    <div>
+      <ItemListing />
+    </div>
+  )
 }

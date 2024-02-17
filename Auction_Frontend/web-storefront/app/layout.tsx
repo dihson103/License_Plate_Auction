@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { ThemeModeScript } from 'flowbite-react'
+import AppHeader from './components/AppHeader'
+import AppBanner from './components/AppBanner'
 
 export const metadata: Metadata = {
   title: 'Lisence auction',
@@ -13,7 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <head>
+        <ThemeModeScript />
+      </head>
+      <body>
+        <AppHeader />
+        <AppBanner />
+        <main className='container mx-auto px-5 pt-10'>{children}</main>
+      </body>
     </html>
   )
 }
