@@ -34,7 +34,7 @@ namespace GatewayService
 
             app.UseMiddleware<JwtAuthenticationMiddleware>();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapReverseProxy();

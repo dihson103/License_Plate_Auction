@@ -26,7 +26,7 @@ const renderer = ({
       {completed ? (
         <span>Finished</span>
       ) : (
-        <span>
+        <span suppressHydrationWarning>
           {zeroPad(days)}:{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
         </span>
       )}

@@ -71,7 +71,8 @@ namespace SearchService.Services
                     )
                 )
                 .From(skip) // Number of documents to skip
-                .Size(searchParam.PageSize); // Number of documents to return per page
+                .Size(searchParam.PageSize) // Number of documents to return per page
+                .Sort(s => s.Field(f => f.Field("id").Ascending()));
 
             var searchResponse = await _repository.Get(searchDescriptor);
 
