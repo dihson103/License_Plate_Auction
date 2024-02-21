@@ -64,6 +64,8 @@ namespace SearchService.Services
                                 conditions.Add(mq => mq.Match(m => m.Field(f => f.KindOfCar).Query(searchParam.KindOfCar)));
                             if (!string.IsNullOrEmpty(searchParam.LicenseType))
                                 conditions.Add(mq => mq.Match(m => m.Field(f => f.LicenseType).Query(searchParam.LicenseType)));
+                            if(!string.IsNullOrEmpty(searchParam.Status))
+                                conditions.Add(mq => mq.Match(m => m.Field(f => f.Status).Query(searchParam.Status)));
 
                             // Combine all conditions with 'must' operator
                             return m.Bool(bq => bq.Must(conditions.ToArray()));

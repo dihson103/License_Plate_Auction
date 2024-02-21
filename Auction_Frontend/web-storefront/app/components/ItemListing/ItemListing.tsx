@@ -5,6 +5,7 @@ import AppItem from '../AppItem'
 import AppPagination from '../AppPagination'
 import { useEffect, useState } from 'react'
 import { AuctionResponse } from '@/app/types/auction.type'
+import SearchAuction from '../SearchAuction'
 
 export default function ItemListing() {
   const [auctions, setAuctions] = useState<AuctionResponse[] | null>(null)
@@ -22,6 +23,10 @@ export default function ItemListing() {
 
   return (
     <>
+      <h1 className='text-4xl mb-10 mt-10 font-bold tracking-tight text-center text-gray-900 dark:text-white'>
+        ĐẤU GIÁ BIỂN SỐ XE Ô TÔ
+      </h1>
+      <SearchAuction />
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>
         {auctions?.map((item) => <AppItem auction={item} key={item.id} />)}
       </div>

@@ -19,3 +19,13 @@ export type SearchResponse = {
   currentPage: number
   results: AuctionResponse[]
 }
+
+export type AuctionListConfig = {
+  page?: number
+  pageSize?: number
+  status?: string
+  licenseType?: string
+  kindOfCar?: string
+  city?: string
+  licensePlate?: string
+}
