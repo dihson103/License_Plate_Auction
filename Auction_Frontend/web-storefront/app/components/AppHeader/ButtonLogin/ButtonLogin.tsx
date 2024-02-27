@@ -1,6 +1,5 @@
 'use client'
 
-import { AuthResponse } from '@/app/types/auth.type'
 import { Avatar, Button, Dropdown, DropdownDivider, DropdownHeader, DropdownItem, NavbarToggle } from 'flowbite-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -13,8 +12,6 @@ export default function ButtonLogin() {
 
   const isAuthenticated = session?.user ? true : false
 
-  const { data } = (session?.user as AuthResponse) ?? {}
-
   const handleSignUpClick = () => {
     router.push('register')
   }
@@ -25,8 +22,8 @@ export default function ButtonLogin() {
         <>
           <Dropdown arrowIcon={false} inline label={<Avatar alt='User settings' img='/dihson103.jpg' rounded />}>
             <DropdownHeader>
-              <span className='block text-sm'>{data.fullName}</span>
-              <span className='block truncate text-sm font-medium'>{data.email}</span>
+              <span className='block text-sm'>{session?.user.data.fullName}</span>
+              <span className='block truncate text-sm font-medium'>{session?.user.data.email}</span>
             </DropdownHeader>
             <DropdownItem>Dashboard</DropdownItem>
             <DropdownItem>Settings</DropdownItem>

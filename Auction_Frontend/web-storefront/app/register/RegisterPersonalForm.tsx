@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { personalFormSchema, PersonalFormType } from '../utils/rule'
 import { convertLocalDateTimeToUTC, convertUTCtoLocalDateTimeUTC } from '../utils/utils'
 import { UserRegister } from '../types/user.type'
+import { signIn } from 'next-auth/react'
 
 interface Props {
   setIsInputPersonalInfo: Dispatch<SetStateAction<boolean>>
@@ -92,6 +93,12 @@ export default function RegisterPersonalForm({ setIsInputPersonalInfo, registerD
           Next
         </Button>
       </div>
+      <p className='text-sm text-gray-500 dark:text-gray-300'>
+        Already have registered?&nbsp;
+        <button type='button' className='text-purple-600 dark:text-purple-300' onClick={() => signIn()}>
+          Login now
+        </button>
+      </p>
     </form>
   )
 }

@@ -1,4 +1,6 @@
-export type AuthResponse = {
+import NextAuth from 'next-auth'
+
+type AuthResponse = {
   data: UserResponse
   accessToken: string
   refreshToken: string
@@ -13,4 +15,10 @@ type UserResponse = {
   status: boolean
   wallet: number
   address: string
+}
+
+declare module 'next-auth' {
+  interface Session {
+    user: AuthResponse
+  }
 }

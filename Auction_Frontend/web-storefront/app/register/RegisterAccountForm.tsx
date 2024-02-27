@@ -5,6 +5,7 @@ import { AccountFormSchema, accountFormSchema } from '../utils/rule'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { UserRegister } from '../types/user.type'
+import { signIn } from 'next-auth/react'
 
 interface Props {
   setIsInputPersonalInfo: Dispatch<SetStateAction<boolean>>
@@ -89,9 +90,9 @@ export default function RegisterAccountForm({ setIsInputPersonalInfo, setRegiste
       </div>
       <p className='text-sm text-gray-500 dark:text-gray-300'>
         Already have registered?&nbsp;
-        <Link href='/login' className='text-purple-600 dark:text-purple-300'>
+        <button type='button' className='text-purple-600 dark:text-purple-300' onClick={() => signIn()}>
           Login now
-        </Link>
+        </button>
       </p>
     </form>
   )
