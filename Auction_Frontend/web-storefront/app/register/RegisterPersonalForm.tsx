@@ -6,20 +6,31 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { personalFormSchema, PersonalFormType } from '../utils/rule'
-import { convertLocalDateTimeToUTC } from '../utils/utils'
+import { convertLocalDateTimeToUTC, convertUTCtoLocalDateTimeUTC } from '../utils/utils'
+import { UserRegister } from '../types/user.type'
 
 interface Props {
   setIsInputPersonalInfo: Dispatch<SetStateAction<boolean>>
+  setRegisterData: Dispatch<SetStateAction<UserRegister>>
+  registerData: UserRegister
 }
 
 type FormInput = PersonalFormType
 
-export default function RegisterPersonalForm({ setIsInputPersonalInfo }: Props) {
+export default function RegisterPersonalForm({ setIsInputPersonalInfo, registerData, setRegisterData }: Props) {
+  const initialData: FormInput = {
+    address: registerData.address,
+    dob: convertUTCtoLocalDateTimeUTC(registerData.dateBirth),
+    fullname: registerData.fullname,
+    identificationNumber: registerData.id
+  }
+
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<FormInput>({
+    defaultValues: initialData,
     resolver: yupResolver(personalFormSchema)
   })
 
@@ -29,7 +40,14 @@ export default function RegisterPersonalForm({ setIsInputPersonalInfo }: Props) 
       dob: convertLocalDateTimeToUTC(data.dob)
     }
 
-    console.log('Submitting:', modifiedData)
+    setRegisterData((previousValue) => ({
+      ...previousValue,
+      id: modifiedData.identificationNumber,
+      address: modifiedData.address,
+      fullname: modifiedData.fullname,
+      dateBirth: modifiedData.dob
+    }))
+
     setIsInputPersonalInfo((previousValue) => !previousValue)
   })
 
@@ -64,6 +82,7 @@ export default function RegisterPersonalForm({ setIsInputPersonalInfo }: Props) 
           id='dob'
           className='form-input mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           {...register('dob')}
+          required
         />
       </div>
       <div className='text-red-600 min-h-6 text-sm'>{errors.dob?.message}</div>

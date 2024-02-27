@@ -57,7 +57,7 @@ namespace SearchService.Services
                             // Add search conditions based on the provided parameters
                             var conditions = new List<Func<QueryContainerDescriptor<Auction>, QueryContainer>>();
                             if (!string.IsNullOrEmpty(searchParam.LisensePlate))
-                                conditions.Add(mq => mq.QueryString(qs => qs.Query('*' + searchParam.LisensePlate + '*')));
+                                conditions.Add(mq => mq.QueryString(qs => qs.Fields(f => f.Field(f => f.LicensePlate)).Query('*' + searchParam.LisensePlate + '*')));
                             if (!string.IsNullOrEmpty(searchParam.City))
                                 conditions.Add(mq => mq.Match(m => m.Field(f => f.City).Query(searchParam.City)));
                             if (!string.IsNullOrEmpty(searchParam.KindOfCar))

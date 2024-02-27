@@ -41,6 +41,7 @@ namespace AccountService.Services
 
             var user = _mapper.Map<UserAccount>(userDto);
             user.Status = true;
+            //ramdom mat khau va ma hoa
 
             var result = await _userRepository.Add(user);
             if (!result)
@@ -48,12 +49,43 @@ namespace AccountService.Services
                 throw new MyException((int)HttpStatusCode.BadRequest, "Add user account failed.");
             }
 
+            //push event to send email
+
             return _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> GetById(string id)
         {
             var user = await getUserById(id);
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<UserDto> Register(RegisterUserDto userDto)
+        {
+            var isIdExist = await _userRepository.IsUserIdExist(userDto.Id);
+            if (isIdExist)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, $"User has id {userDto.Id} already exist.");
+            }
+
+            var isEmailExist = await _userRepository.IsEmailExist(userDto.Email);
+            if (isEmailExist)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, $"User has email {userDto.Email} already exist.");
+            }
+
+            var user = _mapper.Map<UserAccount>(userDto);
+            user.Status = true;
+            // ma hoa mat khau
+
+            var result = await _userRepository.Add(user);
+            if (!result)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, "Add user account failed.");
+            }
+
+            //push event to send email
 
             return _mapper.Map<UserDto>(user);
         }

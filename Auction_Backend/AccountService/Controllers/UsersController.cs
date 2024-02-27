@@ -41,6 +41,13 @@ namespace AccountService.Controllers
             return CreatedAtAction(nameof(GetById), new { id = userDto.Id }, userDto);
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> UserRegister([FromBody] RegisterUserDto registerUser)
+        {
+            var userDto =  await _userService.Register(registerUser);
+            return CreatedAtAction(nameof(GetById), new { id = userDto.Id }, userDto);
+        }
+
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> UpdateUserStatus(
             [FromRoute] string id, [FromBody] UpdateUserStatusDto updateUserStatusDto

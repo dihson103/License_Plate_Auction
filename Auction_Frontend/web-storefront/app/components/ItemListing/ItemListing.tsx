@@ -3,21 +3,31 @@
 import { getData } from '@/app/actions/auction.action'
 import AppItem from '../AppItem'
 import AppPagination from '../AppPagination'
-import { useEffect, useState } from 'react'
-import { AuctionResponse } from '@/app/types/auction.type'
+import { AuctionListConfig, AuctionResponse } from '@/app/types/auction.type'
 import SearchAuction from '../SearchAuction'
+import { useEffect, useState } from 'react'
 
-export default function ItemListing() {
+type Props = {
+  searchParams: AuctionListConfig
+}
+
+export default function ItemListing({ searchParams }: Props) {
   const [auctions, setAuctions] = useState<AuctionResponse[] | null>(null)
-  const [pageIndex, setPageIndex] = useState<number>(1)
+  const [pageIndex, setPageIndex] = useState<number>(searchParams.page ?? 1)
   const [totalPages, setTotalPages] = useState<number>(0)
+  const [isNotFound, setIsNotFound] = useState(false)
 
   useEffect(() => {
-    getData(pageIndex).then((data) => {
-      setAuctions(data.results)
-      setTotalPages(data.totalPages)
-    })
-  }, [pageIndex])
+    getData(pageIndex, searchParams.licensePlate || '')
+      .then((data) => {
+        setAuctions(data.results)
+        setTotalPages(data.totalPages)
+        setIsNotFound(false)
+      })
+      .catch(() => {
+        setIsNotFound(true)
+      })
+  }, [pageIndex, searchParams.licensePlate])
 
   if (auctions?.length === 0) return <h3>Loading ...</h3>
 
@@ -28,7 +38,8 @@ export default function ItemListing() {
       </h1>
       <SearchAuction />
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-        {auctions?.map((item) => <AppItem auction={item} key={item.id} />)}
+        {!isNotFound && auctions?.map((item) => <AppItem auction={item} key={item.id} />)}
+        {isNotFound && <h3>Not Found</h3>}
       </div>
       <div>
         <AppPagination pageIndex={pageIndex} totalPages={totalPages} setPageIndex={setPageIndex} />

@@ -7,3 +7,15 @@ export const convertLocalDateTimeToUTC = (localDateTime: string) => {
 
   return utcDate.toISOString()
 }
+
+export const convertUTCtoLocalDateTimeUTC = (utcDateTime: string): string => {
+  const date = new Date(utcDateTime)
+  const year = date.getUTCFullYear()
+  const month = `${date.getUTCMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getUTCDate()}`.padStart(2, '0')
+  const hours = `${date.getUTCHours()}`.padStart(2, '0')
+  const minutes = `${date.getUTCMinutes()}`.padStart(2, '0')
+
+  // Format: "yyyy-MM-ddTHH:mm"
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}

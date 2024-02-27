@@ -10,5 +10,6 @@ namespace AccountService.Services.Abstract
         Task<UserDto> Add(CreateUserDto userDto);
         Task UpdateUserStatus(string id, UpdateUserStatusDto userStatusDto);
         Task UpdateUserEmail(string id, UpdateUserEmailDto userEmailDto);
+        Task<UserDto> Register(RegisterUserDto userDto);
     }
 }
