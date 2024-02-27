@@ -7,10 +7,10 @@ export default function SearchAuction() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const defaultInputValue = searchParams.get('licensePlate') || ''
+  const defaultInputValue = searchParams?.get('licensePlate') || ''
 
   const handleSearch = (name: string, term: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams || '')
     if (term) {
       params.set(name, term)
     } else {
