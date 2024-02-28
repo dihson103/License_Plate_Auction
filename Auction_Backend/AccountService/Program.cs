@@ -41,6 +41,11 @@ namespace AccountService
 
             builder.Services.AddScoped<IAuthService, AuthService>();
 
+            builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+            {
+                build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+            }));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,6 +54,8 @@ namespace AccountService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("corspolicy");
 
             app.UseMiddleware<ExceptionMiddleware>();
             //app.UseMiddleware<JwtAuthenticationMiddleware>();

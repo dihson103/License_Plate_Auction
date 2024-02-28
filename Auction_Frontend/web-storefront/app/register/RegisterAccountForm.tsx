@@ -1,11 +1,14 @@
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
 import Link from 'next/link'
 import { Dispatch, SetStateAction, useEffect } from 'react'
-import { AccountFormSchema, accountFormSchema } from '../utils/rule'
+import { signIn } from 'next-auth/react'
+import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+
+import { AccountFormSchema, accountFormSchema } from '../utils/rule'
 import { UserRegister } from '../types/user.type'
-import { signIn } from 'next-auth/react'
+import { registerUserAccount } from '../actions/user.action'
 
 interface Props {
   setIsInputPersonalInfo: Dispatch<SetStateAction<boolean>>
@@ -47,6 +50,14 @@ export default function RegisterAccountForm({ setIsInputPersonalInfo, setRegiste
     setRegisterData((previousValue) => ({ ...previousValue, email: data.email, password: data.password }))
 
     console.log('>>> call api to register user', registerData)
+
+    registerUserAccount(registerData)
+      .then(() => {
+        toast.success('Register new account success')
+      })
+      .catch((error: Error) => {
+        toast.error(error.message)
+      })
   })
 
   return (

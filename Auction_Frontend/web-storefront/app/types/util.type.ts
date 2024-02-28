@@ -7,3 +7,8 @@ export type Province = {
 export type ProvinceResponse = {
   results: Province[]
 }
+
+export type ApiError = {
+  status: number
+  message: string
+}

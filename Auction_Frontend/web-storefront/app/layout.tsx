@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeModeScript } from 'flowbite-react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata: Metadata = {
   title: 'Lisence auction',
@@ -17,7 +19,10 @@ export default function RootLayout({
       <head>
         <ThemeModeScript />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   )
 }

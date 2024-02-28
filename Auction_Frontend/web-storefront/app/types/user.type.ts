@@ -6,3 +6,13 @@ export type UserRegister = {
   dateBirth: string
   password: string
 }
+
+export type UserResponse = {
+  id: string
+  email: string
+  fullName: string
+  birthDate: string
+  status: boolean
+  wallet: number
+  address: string
+}
