@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeModeScript } from 'flowbite-react'
+import AppNavBar from './components/AppNavBar'
+import AppSideBar from './components/AppSideBar'
 
 export const metadata: Metadata = {
   title: 'Admin page',
@@ -17,7 +19,13 @@ export default function RootLayout({
       <head>
         <ThemeModeScript />
       </head>
-      <body>{children}</body>
+      <body className='flex h-screen bg-gray-100'>
+        <AppSideBar />
+        <div className='flex flex-col flex-1 overflow-y-auto'>
+          <AppNavBar />
+          <div className='p-4'>{children}</div>
+        </div>
+      </body>
     </html>
   )
 }
