@@ -1,12 +1,13 @@
 import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink } from 'flowbite-react'
 import Image from 'next/image'
 import ButtonLogin from './ButtonLogin'
+import { IoCarSportOutline } from 'react-icons/io5'
 
 export default function AppHeader() {
   return (
     <Navbar fluid rounded className='shadow-md'>
-      <NavbarBrand href='https://flowbite-react.com'>
-        <Image src='/dihson103.jpg' className='mr-3 h-6 sm:h-9' height={30} width={30} alt='Flowbite React Logo' />
+      <NavbarBrand href='https://flowbite-react.com' className='text-red-600'>
+        <IoCarSportOutline size={34} className='mr-1' />
         <span className='self-center whitespace-nowrap text-xl font-semibold dark:text-white'>
           Lisense Plate Auction
         </span>

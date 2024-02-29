@@ -8,7 +8,7 @@ interface props {
 
 export default function AppItem({ auction }: props) {
   return (
-    <div className=''>
+    <div>
       <Card href='#' className='max-w-sm h-40 relative  mb-5'>
         <h5 className='text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white'>
           {auction.licensePlate}

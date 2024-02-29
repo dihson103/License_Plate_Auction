@@ -19,3 +19,25 @@ export const convertUTCtoLocalDateTimeUTC = (utcDateTime: string): string => {
   // Format: "yyyy-MM-ddTHH:mm"
   return `${year}-${month}-${day}T${hours}:${minutes}`
 }
+
+export const getStatusFromSearchParams = (status: string | undefined) => {
+  switch (status) {
+    case 'da-dau-gia':
+      return 'Finished'
+    case 'sap-dau-gia':
+      return 'Pending'
+    default:
+      return 'Live'
+  }
+}
+
+export const getFilterByFromSearchParams = (status: string | undefined) => {
+  switch (status) {
+    case 'Finished':
+      return 3
+    case 'Pending':
+      return 2
+    default:
+      return 1
+  }
+}
