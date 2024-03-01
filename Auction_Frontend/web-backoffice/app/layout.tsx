@@ -3,6 +3,8 @@ import './globals.css'
 import { ThemeModeScript } from 'flowbite-react'
 import AppNavBar from './components/AppNavBar'
 import AppSideBar from './components/AppSideBar'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata: Metadata = {
   title: 'Admin page',
@@ -25,6 +27,7 @@ export default function RootLayout({
           <AppNavBar />
           <div className='p-4'>{children}</div>
         </div>
+        <ToastContainer />
       </body>
     </html>
   )

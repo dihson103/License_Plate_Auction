@@ -1,55 +1,46 @@
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react'
-import DeleteButton from '../components/DeleteButton'
-import EditButton from '../components/EditButton'
+'use client'
 
-export default function AdminTable() {
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react'
+import { AdminResponse, AdminSearchParam } from '@/types/admins.type'
+import { useEffect, useState } from 'react'
+import { getAdmins } from '../actions/admins.action'
+import { toast } from 'react-toastify'
+import AdminRow from './AdminRow'
+import AppPagination from '../components/AppPagination'
+
+type Props = {
+  searchParams: AdminSearchParam
+}
+
+export default function AdminTable({ searchParams }: Props) {
+  const [adminList, setAdminList] = useState<AdminResponse[] | null>(null)
+  const [totalPages, setTotalPages] = useState<number>(0)
+
+  useEffect(() => {
+    getAdmins(searchParams)
+      .then((data) => {
+        setAdminList(data.result)
+        setTotalPages(data.totalPage)
+      })
+      .catch((error: Error) => {
+        toast.error(error.message)
+      })
+  }, [searchParams])
+
   return (
     <div className='overflow-x-auto'>
       <Table hoverable>
         <TableHead>
-          <TableHeadCell>Product name</TableHeadCell>
-          <TableHeadCell>Color</TableHeadCell>
-          <TableHeadCell>Category</TableHeadCell>
-          <TableHeadCell>Price</TableHeadCell>
+          <TableHeadCell>Admin Id</TableHeadCell>
+          <TableHeadCell>Admin Name</TableHeadCell>
+          <TableHeadCell>Admin Email</TableHeadCell>
           <TableHeadCell>Actions</TableHeadCell>
         </TableHead>
         <TableBody className='divide-y'>
-          <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-            <TableCell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
-              {'Apple MacBook Pro 17"'}
-            </TableCell>
-            <TableCell>Sliver</TableCell>
-            <TableCell>Laptop</TableCell>
-            <TableCell>$2999</TableCell>
-            <TableCell className='flex space-x-2'>
-              <DeleteButton />
-              <EditButton />
-            </TableCell>
-          </TableRow>
-          <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-            <TableCell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
-              Microsoft Surface Pro
-            </TableCell>
-            <TableCell>White</TableCell>
-            <TableCell>Laptop PC</TableCell>
-            <TableCell>$1999</TableCell>
-            <TableCell className='flex space-x-2'>
-              <DeleteButton />
-              <EditButton />
-            </TableCell>
-          </TableRow>
-          <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-            <TableCell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>Magic Mouse 2</TableCell>
-            <TableCell>Black</TableCell>
-            <TableCell>Accessories</TableCell>
-            <TableCell>$99</TableCell>
-            <TableCell className='flex space-x-2'>
-              <DeleteButton />
-              <EditButton />
-            </TableCell>
-          </TableRow>
+          {adminList && adminList.map((item) => <AdminRow key={item.id} admin={item} />)}
         </TableBody>
       </Table>
+      <AppPagination pageIndex={searchParams.pageIndex || 1} totalPages={totalPages} />
     </div>
   )
 }

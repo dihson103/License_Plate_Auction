@@ -1,7 +1,7 @@
-import { Button, TextInput } from 'flowbite-react'
+import { Button } from 'flowbite-react'
 import React from 'react'
-import { FaSearch } from 'react-icons/fa'
 import { IoMdPersonAdd } from 'react-icons/io'
+import SearchInput from './SearchInput'
 
 export default function SearchAdmin() {
   return (
@@ -12,7 +12,7 @@ export default function SearchAdmin() {
             Search
           </label>
           <div className='relative mt-1 lg:w-64 xl:w-96'>
-            <TextInput type='text' icon={FaSearch} placeholder='Search' size={40} />
+            <SearchInput />
           </div>
         </form>
         <div className='flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0'>

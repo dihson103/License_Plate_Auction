@@ -47,14 +47,18 @@ namespace AccountService.Repositories
         {
             int skip = (searchParam.PageIndex - 1) * searchParam.PageSize;
 
-            int numberItem = await _context.Admins
-                .Where(x => x.FullName.Contains(searchParam.searchValue))
-                .CountAsync();
+            IQueryable<AdminAccount> query = _context.Admins;
+
+            if (!string.IsNullOrEmpty(searchParam.searchValue))
+            {
+                query = query.Where(x => x.FullName.Contains(searchParam.searchValue));
+            }
+
+            int numberItem = await query.CountAsync();
 
             int totalPages = (int)Math.Ceiling((double)numberItem / searchParam.PageSize);
 
-            var result = await _context.Admins
-                .Where(x => x.FullName.Contains(searchParam.searchValue))
+            var result = await query
                 .OrderBy(x => x.Id)
                 .Skip(skip)
                 .Take(searchParam.PageSize)
