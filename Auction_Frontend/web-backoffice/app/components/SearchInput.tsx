@@ -14,7 +14,7 @@ export default function SearchInput({ searchInputName }: Props) {
   const router = useRouter()
 
   const handleSearch = (name: string, term: string) => {
-    const params = new URLSearchParams(searchParams || '')
+    const params = new URLSearchParams()
     if (term) {
       params.set(name, term)
     } else {
