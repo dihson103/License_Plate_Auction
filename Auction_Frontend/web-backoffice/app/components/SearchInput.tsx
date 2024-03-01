@@ -4,7 +4,11 @@ import { TextInput } from 'flowbite-react'
 import { FaSearch } from 'react-icons/fa'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
-export default function SearchInput() {
+type Props = {
+  searchInputName: string
+}
+
+export default function SearchInput({ searchInputName }: Props) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -24,7 +28,7 @@ export default function SearchInput() {
       icon={FaSearch}
       placeholder='Search'
       size={40}
-      onChange={(e) => handleSearch('searchValue', e.target.value)}
+      onChange={(e) => handleSearch(searchInputName, e.target.value)}
     />
   )
 }

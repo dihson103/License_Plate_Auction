@@ -3,7 +3,7 @@ import React from 'react'
 import { IoMdPersonAdd } from 'react-icons/io'
 import SearchInput from '../components/SearchInput'
 
-export default function SearchAdmin() {
+export default function SearchUser() {
   return (
     <div className='sm:flex mb-4 mt-2'>
       <div className='items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700'>
@@ -65,7 +65,7 @@ export default function SearchAdmin() {
       <div className='flex items-center ml-auto space-x-2 sm:space-x-3'>
         <Button gradientDuoTone='purpleToBlue'>
           <IoMdPersonAdd size={20} className='mr-2' />
-          Add admin
+          Add User
         </Button>
       </div>
     </div>
