@@ -1,13 +1,40 @@
-import { AdminSearchParam, AdminsSearchResponse } from '@/types/admins.type'
-import { ApiError } from '@/types/utils.type'
+'use server'
 
-export const getAdmins = async (searchParam: AdminSearchParam): Promise<AdminsSearchResponse> => {
-  const result = await fetch(
-    `http://localhost:6001/admins?SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
-  )
-  if (!result.ok) {
-    const error = (await result.json()) as ApiError
-    throw Error(error.message)
-  }
-  return result.json()
+import {
+  AdminResponse,
+  AdminSearchParam,
+  AdminsSearchResponse,
+  CreateAdminRequest,
+  UpdateAdminRequest
+} from '@/types/admins.type'
+import { baseUrl, fetchApi } from './utils.action'
+import { revalidatePath } from 'next/cache'
+
+export const getAdmins = (searchParam: AdminSearchParam): Promise<AdminsSearchResponse> => {
+  const url = `${baseUrl}/admins?SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
+  return fetchApi<AdminsSearchResponse>(url, null, 'GET')
+}
+
+export const getAdmin = (id: number): Promise<AdminResponse> => {
+  const url = `${baseUrl}/admins/${id}`
+  return fetchApi<AdminResponse>(url, null, 'GET')
+}
+
+export const deleteAdmin = (id: number) => {
+  const url = `${baseUrl}/admins/${id}`
+  const result = fetchApi(url, null, 'DELETE')
+  revalidatePath('/admins')
+  return result
+}
+
+export const updateAdmin = (admin: UpdateAdminRequest) => {
+  const url = `${baseUrl}/admins/${admin.id}`
+  const body = JSON.stringify(admin)
+  return fetchApi(url, body, 'PUT')
+}
+
+export const createAdmin = (admin: CreateAdminRequest) => {
+  const url = `${baseUrl}/admins`
+  const body = JSON.stringify(admin)
+  return fetchApi(url, body, 'POST')
 }

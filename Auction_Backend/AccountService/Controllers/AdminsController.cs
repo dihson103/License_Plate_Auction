@@ -47,7 +47,7 @@ namespace AccountService.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _adminService.Delete(id);
-            return Ok();
+            return NoContent();
         }
     }
 }

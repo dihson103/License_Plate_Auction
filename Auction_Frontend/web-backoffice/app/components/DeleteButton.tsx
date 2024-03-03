@@ -5,8 +5,18 @@ import { useState } from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { MdDeleteForever } from 'react-icons/md'
 
-export default function DeleteButton() {
+type Props = {
+  question: string
+  callBackFunction: () => void
+}
+
+export default function DeleteButton({ question, callBackFunction }: Props) {
   const [openModal, setOpenModal] = useState(false)
+
+  const handleYes = () => {
+    setOpenModal(false)
+    callBackFunction()
+  }
 
   return (
     <>
@@ -19,11 +29,9 @@ export default function DeleteButton() {
         <Modal.Body>
           <div className='text-center'>
             <HiOutlineExclamationCircle className='mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200' />
-            <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this product?
-            </h3>
+            <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>{question}</h3>
             <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={() => setOpenModal(false)}>
+              <Button color='failure' onClick={handleYes}>
                 {"Yes, I'm sure"}
               </Button>
               <Button color='gray' onClick={() => setOpenModal(false)}>

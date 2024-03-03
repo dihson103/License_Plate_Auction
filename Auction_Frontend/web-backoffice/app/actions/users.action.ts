@@ -1,13 +1,9 @@
 import { SearchUserResponse, UserSearchParams } from '@/types/users.type'
-import { ApiError } from '@/types/utils.type'
+import { baseUrl, fetchApi } from './utils.action'
 
-export const getUsers = async (searchParam: UserSearchParams): Promise<SearchUserResponse> => {
-  const result = await fetch(
-    `http://localhost:6001/users?status=${searchParam.status || true}&SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
-  )
-  if (!result.ok) {
-    const error = (await result.json()) as ApiError
-    throw Error(error.message)
-  }
-  return result.json()
+const getListUserTag = ['users']
+
+export const getUsers = (searchParam: UserSearchParams): Promise<SearchUserResponse> => {
+  const url = `${baseUrl}/users?status=${searchParam.status || true}&SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
+  return fetchApi<SearchUserResponse>(url, null, 'GET')
 }
