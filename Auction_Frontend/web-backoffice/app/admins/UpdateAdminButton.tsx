@@ -1,11 +1,14 @@
 'use client'
 
-import { AdminResponse } from '@/types/admins.type'
+import { AdminResponse, UpdateAdminRequest } from '@/types/admins.type'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import { ChangeEvent, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { CiEdit } from 'react-icons/ci'
 import { FaUserAstronaut } from 'react-icons/fa'
 import { HiMail } from 'react-icons/hi'
+import { UpdateAdminFormSchema, updateAdminSchema } from '../rules/admins.rule'
 
 type Props = {
   admin: AdminResponse
@@ -14,21 +17,21 @@ type Props = {
 
 export default function UpdateAdminButton({ admin, updateAdminAction }: Props) {
   const [openModal, setOpenModal] = useState(false)
-  const [data, setData] = useState<AdminResponse>(admin)
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({ ...prev, email: e.target.value }))
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<UpdateAdminFormSchema>({
+    defaultValues: admin,
+    resolver: yupResolver(updateAdminSchema)
+  })
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({ ...prev, fullName: e.target.value }))
-  }
-
-  const handleYesButton = () => {
-    console.log('>>> update data', data)
+  const handleYesButton = handleSubmit((data) => {
+    // console.log('>>> update data', data)
     updateAdminAction(data)
     setOpenModal(false)
-  }
+  })
 
   return (
     <>
@@ -39,29 +42,17 @@ export default function UpdateAdminButton({ admin, updateAdminAction }: Props) {
       <Modal dismissible size={'lg'} show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>{`Update admin has id: ${admin.id}`}</Modal.Header>
         <Modal.Body>
-          <div className='space-y-6'>
+          <div className='space-y'>
             <div className='mb-2 block'>
               <Label htmlFor='email' value="Admin's email" />
             </div>
-            <TextInput
-              id='email'
-              type='email'
-              onChange={handleEmailChange}
-              defaultValue={admin.email}
-              icon={HiMail}
-              required
-            />
+            <TextInput id='email' type='email' {...register('email')} icon={HiMail} required />
+            <div className='text-red-600 min-h-6 text-sm'>{errors.email?.message}</div>
             <div className=''>
               <Label htmlFor='fullname' value="Admin's fullname" />
             </div>
-            <TextInput
-              id='fullname'
-              type='text'
-              onChange={handleNameChange}
-              defaultValue={admin.fullName}
-              icon={FaUserAstronaut}
-              required
-            />
+            <TextInput id='fullname' type='text' {...register('fullName')} icon={FaUserAstronaut} required />
+            <div className='text-red-600 min-h-6 text-sm'>{errors.fullName?.message}</div>
           </div>
         </Modal.Body>
         <Modal.Footer>
