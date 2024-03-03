@@ -2,17 +2,47 @@
 
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { FaUserAstronaut } from 'react-icons/fa'
 import { HiMail } from 'react-icons/hi'
 import { IoMdPersonAdd } from 'react-icons/io'
 import { RiLockPasswordFill } from 'react-icons/ri'
+import { CreateAdminFormSchema, createAdminSchema } from '../rules/admins.rule'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { createAdmin } from '../actions/admins.action'
+import { toast } from 'react-toastify'
 
 export default function CreateAdminButton() {
   const [openModal, setOpenModal] = useState(false)
 
-  const handleYesButton = () => {
-    setOpenModal(false)
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors }
+  } = useForm<CreateAdminFormSchema>({
+    resolver: yupResolver(createAdminSchema)
+  })
+
+  const clearData = () => {
+    setValue('email', '')
+    setValue('password', '')
+    setValue('fullName', '')
   }
+
+  const handleYesButton = handleSubmit((data) => {
+    // console.log('>>> form data', data)
+    createAdmin(data)
+      .then((data) => {
+        toast.success(`Create admin has name: ${data.fullName} success`)
+        setOpenModal(false)
+        clearData()
+      })
+      .catch((error: Error) => {
+        toast.error(error.message)
+      })
+  })
+
   return (
     <>
       <Button gradientDuoTone='purpleToBlue' onClick={() => setOpenModal(true)}>
@@ -22,23 +52,49 @@ export default function CreateAdminButton() {
       <Modal dismissible size={'lg'} show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>{'Create admin'}</Modal.Header>
         <Modal.Body>
-          <div className='space-y-6'>
+          <div className='space-y'>
             <div className='mb-2 block'>
               <Label htmlFor='email' value="Admin's email" />
             </div>
-            <TextInput id='email' type='email' placeholder='abc@gmail.com' icon={HiMail} required />
+            <TextInput
+              id='email'
+              type='email'
+              placeholder='abc@gmail.com'
+              {...register('email')}
+              icon={HiMail}
+              required
+            />
+            <div className='text-red-600 min-h-6 text-sm'>{errors.email?.message}</div>
+
             <div className='mb-2 block'>
               <Label htmlFor='fullname' value="Admin's fullname" />
             </div>
-            <TextInput id='fullname' type='text' placeholder='Full name' icon={FaUserAstronaut} required />
+            <TextInput
+              id='fullname'
+              type='text'
+              placeholder='Full name'
+              {...register('fullName')}
+              icon={FaUserAstronaut}
+              required
+            />
+            <div className='text-red-600 min-h-6 text-sm'>{errors.fullName?.message}</div>
+
             <div className='mb-2 block'>
               <Label htmlFor='password' value='Password' />
             </div>
-            <TextInput id='password' type='password' placeholder='*********' icon={RiLockPasswordFill} required />
+            <TextInput
+              id='password'
+              type='password'
+              placeholder='*********'
+              {...register('password')}
+              icon={RiLockPasswordFill}
+              required
+            />
+            <div className='text-red-600 min-h-6 text-sm'>{errors.password?.message}</div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleYesButton}>Update now</Button>
+          <Button onClick={handleYesButton}>Add now</Button>
           <Button color='gray' onClick={() => setOpenModal(false)}>
             Cancel
           </Button>

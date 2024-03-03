@@ -38,7 +38,7 @@ export const updateAdmin = (admin: UpdateAdminRequest) => {
 export const createAdmin = (admin: CreateAdminRequest) => {
   const url = `${baseUrl}/admins`
   const body = JSON.stringify(admin)
-  const result = fetchApi(url, body, 'POST')
+  const result = fetchApi<AdminResponse>(url, body, 'POST')
   revalidatePath('/admins')
   return result
 }
