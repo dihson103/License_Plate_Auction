@@ -30,11 +30,15 @@ export const deleteAdmin = (id: number) => {
 export const updateAdmin = (admin: UpdateAdminRequest) => {
   const url = `${baseUrl}/admins/${admin.id}`
   const body = JSON.stringify(admin)
-  return fetchApi(url, body, 'PUT')
+  const result = fetchApi(url, body, 'PUT')
+  revalidatePath('/admins')
+  return result
 }
 
 export const createAdmin = (admin: CreateAdminRequest) => {
   const url = `${baseUrl}/admins`
   const body = JSON.stringify(admin)
-  return fetchApi(url, body, 'POST')
+  const result = fetchApi(url, body, 'POST')
+  revalidatePath('/admins')
+  return result
 }

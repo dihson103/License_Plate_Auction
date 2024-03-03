@@ -40,7 +40,7 @@ namespace AccountService.Controllers
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateAdminDto adminDto)
         {
             await _adminService.Update(id, adminDto);
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
