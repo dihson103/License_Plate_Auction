@@ -1,9 +1,9 @@
 'use server'
 
 import {
-  CreateUserRequest,
   SearchUserResponse,
   UpdateUserRequest,
+  UpdateUserStats,
   UserResponse,
   UserSearchParams
 } from '@/types/users.type'
@@ -24,9 +24,10 @@ export const registerUser = (user: CreateUserFormSchema) => {
   return result
 }
 
-export const banUser = (id: number) => {
-  const url = `${baseUrl}/users/${id}`
-  const result = fetchApi(url, null, 'DELETE')
+export const updateUserStatus = (updateRequest: UpdateUserStats) => {
+  const url = `${baseUrl}/users/${updateRequest.id}/status`
+  const bodyJson = JSON.stringify(updateRequest)
+  const result = fetchApi(url, bodyJson, 'PATCH')
   revalidatePath('/users')
   return result
 }

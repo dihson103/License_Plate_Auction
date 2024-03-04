@@ -3,7 +3,7 @@ import { ApiError } from '@/types/utils.type'
 export const fetchApi = async <T>(
   url: string,
   bodyJson: string | null,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 ): Promise<T> => {
   const result = await fetch(url, {
     method: method,

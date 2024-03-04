@@ -37,3 +37,8 @@ export type UpdateUserRequest = {
   address: string
   birthDate: string
 }
+
+export type UpdateUserStats = {
+  id: string
+  status: boolean
+}

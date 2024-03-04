@@ -54,7 +54,7 @@ namespace AccountService.Controllers
             )
         {
             await _userService.UpdateUserStatus(id, updateUserStatusDto);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("{id}/email")]
@@ -63,7 +63,7 @@ namespace AccountService.Controllers
             )
         {
             await _userService.UpdateUserEmail(id, updateUserEmailDto);
-            return Ok();
+            return NoContent();
         }
     }
 }
