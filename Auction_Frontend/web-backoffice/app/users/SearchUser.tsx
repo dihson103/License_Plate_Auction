@@ -1,7 +1,6 @@
-import { Button } from 'flowbite-react'
 import React from 'react'
-import { IoMdPersonAdd } from 'react-icons/io'
 import SearchInput from '../components/SearchInput'
+import CreateUserButton from './CreateUserButton'
 
 export default function SearchUser() {
   return (
@@ -63,10 +62,7 @@ export default function SearchUser() {
         </div>
       </div>
       <div className='flex items-center ml-auto space-x-2 sm:space-x-3'>
-        <Button gradientDuoTone='purpleToBlue'>
-          <IoMdPersonAdd size={20} className='mr-2' />
-          Add User
-        </Button>
+        <CreateUserButton />
       </div>
     </div>
   )

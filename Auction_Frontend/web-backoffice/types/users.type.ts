@@ -20,3 +20,20 @@ export type UserSearchParams = {
   pageSize?: number
   status: boolean
 }
+
+export type CreateUserRequest = {
+  id: string
+  fullName: string
+  email: string
+  address: string
+  birthDate: string
+  password: string
+}
+
+export type UpdateUserRequest = {
+  id: string
+  fullName: string
+  email: string
+  address: string
+  birthDate: string
+}
