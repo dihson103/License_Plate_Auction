@@ -1,15 +1,9 @@
 'use server'
 
-import {
-  SearchUserResponse,
-  UpdateUserRequest,
-  UpdateUserStats,
-  UserResponse,
-  UserSearchParams
-} from '@/types/users.type'
+import { SearchUserResponse, UpdateUserStats, UserResponse, UserSearchParams } from '@/types/users.type'
 import { baseUrl, fetchApi } from './utils.action'
 import { revalidatePath } from 'next/cache'
-import { CreateUserFormSchema } from '../rules/users.rule'
+import { CreateUserFormSchema, UpdateUserFormSchema } from '../rules/users.rule'
 
 export const getUsers = (searchParam: UserSearchParams): Promise<SearchUserResponse> => {
   const url = `${baseUrl}/users?status=${searchParam.status || true}&SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
@@ -32,7 +26,7 @@ export const updateUserStatus = (updateRequest: UpdateUserStats) => {
   return result
 }
 
-export const updateUser = (user: UpdateUserRequest) => {
+export const updateUser = (user: UpdateUserFormSchema) => {
   const url = `${baseUrl}/users/${user.id}`
   const bodyJson = JSON.stringify(user)
   const result = fetchApi(url, bodyJson, 'PUT')

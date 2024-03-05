@@ -48,6 +48,15 @@ namespace AccountService.Controllers
             return CreatedAtAction(nameof(GetById), new { id = userDto.Id }, userDto);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(
+            [FromBody] UpdateUserRequest updateUserRequest, [FromRoute] string id
+            )
+        {
+            await _userService.UpdateUser(id, updateUserRequest);
+            return NoContent();
+        }
+
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> UpdateUserStatus(
             [FromRoute] string id, [FromBody] UpdateUserStatusDto updateUserStatusDto

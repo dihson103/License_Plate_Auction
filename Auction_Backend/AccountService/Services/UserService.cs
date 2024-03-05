@@ -107,6 +107,39 @@ namespace AccountService.Services
             throw new MyException((int)HttpStatusCode.NotFound, "Search request not found.");
         }
 
+        public async Task UpdateUser(string id, UpdateUserRequest updateUserRequest)
+        {
+            var user = await getUserById(id);
+
+            if(user.Email != updateUserRequest.Email)
+            {
+                var isEmailExist = await _userRepository.IsEmailExist(updateUserRequest.Email);
+                if (isEmailExist)
+                {
+                    throw new MyException((int)HttpStatusCode.BadRequest,
+                        $"User has email {updateUserRequest.Email} already exist.");
+                }
+            }
+
+            if(id != updateUserRequest.Id)
+            {
+                var isUserIdExist = await _userRepository.IsUserIdExist(updateUserRequest.Id);
+                if (isUserIdExist)
+                {
+                    throw new MyException((int)HttpStatusCode.BadRequest,
+                            $"User has id {updateUserRequest.Id} already exist.");
+                }
+            }
+
+            user.Id = updateUserRequest.Id;
+            user.Email = updateUserRequest.Email;
+            user.Address = updateUserRequest.Address;
+            user.BirthDate = updateUserRequest.BirthDate;
+            user.FullName = updateUserRequest.FullName;
+
+            await _userRepository.Update(user);
+        }
+
         public async Task UpdateUserEmail(string id, UpdateUserEmailDto userEmailDto)
         {
             if(id != userEmailDto.Id)

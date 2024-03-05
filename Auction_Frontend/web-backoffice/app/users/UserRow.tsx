@@ -1,9 +1,9 @@
 import { TableCell, TableRow } from 'flowbite-react'
 import DeleteButton from '../components/DeleteButton'
-import EditButton from '../components/EditButton'
 import { UpdateUserStats, UserResponse } from '@/types/users.type'
 import { updateUserStatus } from '../actions/users.action'
 import { toast } from 'react-toastify'
+import UpdateUserButton from './UpdateUserButton'
 
 type Props = {
   user: UserResponse
@@ -35,7 +35,7 @@ export default function UserRow({ user }: Props) {
           question={`Are you sure you want to change status of user has name: ${user.fullName}`}
           callBackFunction={handleUpdateStatus({ id: user.id, status: !user.status })}
         />
-        <EditButton />
+        <UpdateUserButton user={user} />
       </TableCell>
     </TableRow>
   )
