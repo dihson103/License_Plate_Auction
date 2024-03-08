@@ -28,8 +28,8 @@ export default function UserTable({ searchParams }: Props) {
   }, [searchParams])
 
   return (
-    <div className='overflow-x-auto'>
-      <Table hoverable>
+    <div>
+      <Table hoverable className='min-w-full divide-y divide-gray-200 dark:divide-gray-600'>
         <TableHead>
           <TableHeadCell>User Id</TableHeadCell>
           <TableHeadCell>Full Name</TableHeadCell>
