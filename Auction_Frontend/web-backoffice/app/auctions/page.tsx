@@ -1,5 +1,6 @@
 import { AdminSearchParam } from '@/types/admins.type'
 import AuctionTable from './AuctionTable'
+import SearchAuction from './SearchAuction'
 
 type Props = {
   searchParams: AdminSearchParam
@@ -8,6 +9,7 @@ type Props = {
 export default function Auctions({ searchParams }: Props) {
   return (
     <>
+      <SearchAuction />
       <AuctionTable searchParams={searchParams} />
     </>
   )

@@ -38,3 +38,14 @@ export type UpdateAuction = {
   status: number
   reservePrice: number
 }
+
+export type CreateAuction = {
+  startDateTime: string
+  endDateTime: string
+  licensePlate: string
+  kindOfCar: string
+  licenseType: string
+  city: string
+  status: string
+  reservePrice: number
+}

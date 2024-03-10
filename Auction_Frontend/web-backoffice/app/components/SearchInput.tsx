@@ -6,15 +6,16 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
 type Props = {
   searchInputName: string
+  isClearParams?: boolean
 }
 
-export default function SearchInput({ searchInputName }: Props) {
+export default function SearchInput({ searchInputName, isClearParams = true }: Props) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
 
   const handleSearch = (name: string, term: string) => {
-    const params = new URLSearchParams()
+    const params = new URLSearchParams(isClearParams ? '' : searchParams)
     if (term) {
       params.set(name, term)
     } else {
@@ -28,6 +29,7 @@ export default function SearchInput({ searchInputName }: Props) {
       icon={FaSearch}
       placeholder='Search'
       size={40}
+      defaultValue={searchParams.get(searchInputName) || ''}
       onChange={(e) => handleSearch(searchInputName, e.target.value)}
     />
   )

@@ -69,11 +69,9 @@ export default function UpdateAuctionButton({ auction }: Props) {
     setOpenModal(false)
   }
 
-  console.log(errors)
-
   return (
     <>
-      <Button gradientDuoTone='purpleToBlue' className='whitespace-nowrap' onClick={() => setOpenModal(true)}>
+      <Button gradientDuoTone='purpleToPink' className='whitespace-nowrap' onClick={() => setOpenModal(true)}>
         <CiEdit size={20} className='mr-2' />
         Edit
       </Button>
