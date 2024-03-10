@@ -66,5 +66,34 @@ namespace AuctionService.Repositories
         {
             return await _context.Auctions.MaxAsync(x => x.AuctionId) + 1;
         }
+
+        public async Task<(List<Auction> Auctions, int TotalPages)> SearchAuction(AuctionSearchParams searchParams)
+        {
+            var query = _context.Auctions
+                .Include(x => x.Item)
+                .Where(ac => ac.Status == searchParams.Status);
+
+            if (!string.IsNullOrWhiteSpace(searchParams.SearchTerm))
+            {
+                query = _context.Auctions
+                .Include(x => x.Item)
+                .Where(ac => ac.Status == searchParams.Status 
+                    && ac.Item.LicensePlate.Contains(searchParams.SearchTerm));
+            }
+
+            var totalItems = await query.CountAsync();
+
+            int totalPages = (int)Math.Ceiling((double)totalItems / searchParams.PageSize);
+
+            var auctions = await query
+                .OrderBy(ac => ac.AuctionId)
+                .Skip((searchParams.PageIndex - 1) * searchParams.PageSize)
+                .Take(searchParams.PageSize)
+                .ToListAsync();
+
+            return (auctions, totalPages);
+        }
+
+
     }
 }

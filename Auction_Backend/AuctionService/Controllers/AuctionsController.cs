@@ -22,6 +22,13 @@ namespace AuctionService.Controllers
             return Ok(auctions);
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] AuctionSearchParams searchParams)
+        {
+            var result = await _auctionService.SearchAuction(searchParams);
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetAuction([FromRoute]int id)
         {
@@ -40,14 +47,14 @@ namespace AuctionService.Controllers
         public async Task<IActionResult> UpdateAuction([FromRoute] int id, [FromBody] UpdateAuctionDto updateAuctionDto)
         {
             await _auctionService.UpdateAuction(id, updateAuctionDto);
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAuction([FromRoute] int id)
         {
             await _auctionService.DeleteAuction(id);
-            return Ok();
+            return NoContent();
         }
     }
 }

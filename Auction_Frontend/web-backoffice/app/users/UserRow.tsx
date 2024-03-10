@@ -27,12 +27,12 @@ export default function UserRow({ user }: Props) {
 
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.birthDate.substring(0, 10)}</TableCell>
-      <TableCell>{user.address}</TableCell>
+      <TableCell className='whitespace-nowrap'>{user.address}</TableCell>
       <TableCell>{user.wallet}</TableCell>
       <TableCell>{user.status ? 'ACTIVE' : 'INACTIVE'}</TableCell>
       <TableCell className='flex space-x-2'>
         <DeleteButton
-          question={`Are you sure you want to change status of user has name: ${user.fullName}`}
+          question={`Bạn có chắc chắn muốn thay đổi trạng thái của người dùng: ${user.fullName}`}
           callBackFunction={handleUpdateStatus({ id: user.id, status: !user.status })}
         />
         <UpdateUserButton user={user} />

@@ -1,4 +1,4 @@
-import { ApiError } from '@/types/utils.type'
+import { ApiError, ProvinceResponse } from '@/types/utils.type'
 
 export const fetchApi = async <T>(
   url: string,
@@ -29,3 +29,9 @@ export const fetchApi = async <T>(
 }
 
 export const baseUrl = 'http://localhost:6001'
+
+export const getProvinces = async (): Promise<ProvinceResponse> => {
+  const result = await fetch('https://vapi.vnappmob.com/api/province')
+  if (!result.ok) throw new Error('Failed to fetch data')
+  return result.json()
+}

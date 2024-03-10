@@ -65,7 +65,7 @@ export default function UpdateUserButton({ user }: Props) {
 
   return (
     <>
-      <Button gradientDuoTone='purpleToBlue' onClick={() => setOpenModal(true)}>
+      <Button gradientDuoTone='purpleToBlue' className='whitespace-nowrap' onClick={() => setOpenModal(true)}>
         <CiEdit size={20} className='mr-2' />
         Edit
       </Button>

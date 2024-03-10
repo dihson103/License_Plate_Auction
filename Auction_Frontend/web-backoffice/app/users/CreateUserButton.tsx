@@ -51,7 +51,7 @@ export default function CreateUserButton() {
     <>
       <Button gradientDuoTone='purpleToBlue' onClick={() => setOpenModal(true)}>
         <IoMdPersonAdd size={20} className='mr-2' />
-        Add user
+        Add new user
       </Button>
       <Modal show={openModal} size={'4xl'} onClose={() => setOpenModal(false)}>
         <Modal.Header>Create new user</Modal.Header>

@@ -1,6 +1,8 @@
 import { AuctionResponse } from '@/types/auctions.type'
-import { Button } from 'flowbite-react'
 import React from 'react'
+import { convertNumberToVietNamMoney, convertUTCtoLocalDateTime } from '../utils/utils'
+import UpdateAuctionButton from './UpdateAuctionButton'
+import ChangeStatusButton from './ChangeStatusButton'
 
 type props = {
   auction: AuctionResponse
@@ -19,12 +21,17 @@ export default function AuctionRow({ auction }: props) {
       <td className='p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white'>
         {auction.licenseType}
       </td>
+      <td className='p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white'>{auction.city}</td>
       <td className='p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white'>{auction.status}</td>
       <td className='p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white'>
-        {auction.reservePrice + ' VND'}
+        {convertNumberToVietNamMoney(auction.reservePrice)}
       </td>
-      <td className='p-4 space-x-2 whitespace-nowrap'>
-        <Button>Thay đổi trạng thái</Button>
+      <td className='p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white'>
+        {convertUTCtoLocalDateTime(auction.startDateTime) || 'Chưa có ngày bắt đầu'}
+      </td>
+      <td className='flex p-4 space-x-2 whitespace-nowrap'>
+        <ChangeStatusButton auction={auction} />
+        <UpdateAuctionButton auction={auction} />
       </td>
     </tr>
   )

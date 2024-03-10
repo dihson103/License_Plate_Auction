@@ -24,8 +24,17 @@ export type AuctionSearchParam = {
   pageIndex?: number
   pageSize?: number
   status?: string
-  licenseType?: string
-  kindOfCar?: string
-  city?: string
-  licensePlate?: string
+  searchTerm?: string
+}
+
+export type UpdateAuction = {
+  startDateTime?: string | null
+  endDateTime?: string | null
+  auctionId: number
+  licensePlate: string
+  kindOfCar: string
+  licenseType: string
+  city: string
+  status: number
+  reservePrice: number
 }

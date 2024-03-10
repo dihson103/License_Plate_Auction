@@ -18,13 +18,13 @@ export default function AppSideBar() {
           <AppSideBarLink linkTo='/' contentName='Dashboard'>
             <RxDashboard size={24} className='mr-2' />
           </AppSideBarLink>
-          <AppSideBarLink linkTo='/users' contentName='Users management'>
+          <AppSideBarLink linkTo='/users' contentName='Users Management'>
             <FaUsersGear className='mr-2' size={24} />
           </AppSideBarLink>
-          <AppSideBarLink linkTo='/admins' contentName='Admins management'>
+          <AppSideBarLink linkTo='/admins' contentName='Admins Management'>
             <GrUserAdmin size={24} className='mr-2' />
           </AppSideBarLink>
-          <AppSideBarLink linkTo='/auctions' contentName='Auctions management'>
+          <AppSideBarLink linkTo='/auctions' contentName='Auctions Management'>
             <RiAuctionLine size={24} className='mr-2' />
           </AppSideBarLink>
 

@@ -9,6 +9,7 @@ namespace AuctionService.Services.Abstract
         Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto);
         Task UpdateAuction(int id, UpdateAuctionDto updateAuctionDto);
         Task DeleteAuction(int id);
+        Task<AuctionSearchResponse> SearchAuction(AuctionSearchParams searchParams);
 
     }
 }

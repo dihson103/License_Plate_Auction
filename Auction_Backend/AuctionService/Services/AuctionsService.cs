@@ -102,6 +102,26 @@ namespace AuctionService.Services
             throw new MyException((int)HttpStatusCode.NotFound, $"Not found auction has id: {id}.");
         }
 
+        public async Task<AuctionSearchResponse> SearchAuction(AuctionSearchParams searchParams)
+        {
+            var result = await _repository.SearchAuction(searchParams);
+
+            var totalPages = result.TotalPages;
+            var auctions = result.Auctions;
+
+            if(auctions.Count <= 0)
+            {
+                throw new MyException((int)HttpStatusCode.NotFound, $"Search auction is not found");
+            }
+
+            return new AuctionSearchResponse
+            {
+                TotalPages = totalPages,
+                CurrentPage = searchParams.PageIndex,
+                Results = _mapper.Map<List<AuctionDto>>(auctions)
+            };
+        }
+
         public async Task UpdateAuction(int id, UpdateAuctionDto updateAuctionDto)
         {
             if(id != updateAuctionDto.AuctionId)

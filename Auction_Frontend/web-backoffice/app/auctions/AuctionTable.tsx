@@ -44,39 +44,51 @@ export default function AuctionTable({ searchParams }: Props) {
                     </th>
                     <th
                       scope='col'
-                      className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
                     >
-                      Biển số xe
+                      License Plate
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      Kind Of Car
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      License Type
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      City
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      Status
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      Starting price
+                    </th>
+                    <th
+                      scope='col'
+                      className='p-4 text-xs font-medium text-left whitespace-nowrap text-gray-500 uppercase dark:text-gray-400'
+                    >
+                      Start date
                     </th>
                     <th
                       scope='col'
                       className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
                     >
-                      Loại xe
-                    </th>
-                    <th
-                      scope='col'
-                      className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
-                    >
-                      Loại biển số xe
-                    </th>
-                    <th
-                      scope='col'
-                      className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
-                    >
-                      Trạng thái
-                    </th>
-                    <th
-                      scope='col'
-                      className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
-                    >
-                      Giá Khởi Điểm
-                    </th>
-                    <th
-                      scope='col'
-                      className='p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400'
-                    >
-                      Các hành động
+                      Actions
                     </th>
                   </tr>
                 </thead>

@@ -29,21 +29,29 @@ export default function UserTable({ searchParams }: Props) {
 
   return (
     <div>
-      <Table hoverable className='min-w-full divide-y divide-gray-200 dark:divide-gray-600'>
-        <TableHead>
-          <TableHeadCell>User Id</TableHeadCell>
-          <TableHeadCell>Full Name</TableHeadCell>
-          <TableHeadCell>Email</TableHeadCell>
-          <TableHeadCell>Date of birth</TableHeadCell>
-          <TableHeadCell>Address</TableHeadCell>
-          <TableHeadCell>Wallet</TableHeadCell>
-          <TableHeadCell>Status</TableHeadCell>
-          <TableHeadCell>Actions</TableHeadCell>
-        </TableHead>
-        <TableBody className='divide-y'>
-          {userList && userList.map((item) => <UserRow key={item.id} user={item} />)}
-        </TableBody>
-      </Table>
+      <div className='flex flex-col'>
+        <div className='overflow-x-auto'>
+          <div className='inline-block min-w-full align-middle'>
+            <div className='overflow-hidden shadow'>
+              <Table hoverable className='min-w-full divide-y divide-gray-200 dark:divide-gray-600'>
+                <TableHead>
+                  <TableHeadCell>Id</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Full name</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Email</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Date of birth</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Address</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Wallet</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Status</TableHeadCell>
+                  <TableHeadCell className='whitespace-nowrap'>Actions</TableHeadCell>
+                </TableHead>
+                <TableBody className='divide-y'>
+                  {userList && userList.map((item) => <UserRow key={item.id} user={item} />)}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+      </div>
       <AppPagination pageIndex={searchParams.pageIndex || 1} totalPages={totalPages} />
     </div>
   )
