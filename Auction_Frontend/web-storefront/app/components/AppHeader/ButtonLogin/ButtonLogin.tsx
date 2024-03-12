@@ -16,8 +16,8 @@ export default function ButtonLogin() {
     router.push('register')
   }
 
-  const handleChangePassword = () => {
-    router.push('change-password')
+  const handleChangeEmail = () => {
+    router.push('change-email')
   }
 
   return (
@@ -29,7 +29,7 @@ export default function ButtonLogin() {
               <span className='block text-sm'>{session?.user.data.fullName}</span>
               <span className='block truncate text-sm font-medium'>{session?.user.data.email}</span>
             </DropdownHeader>
-            <DropdownItem onClick={handleChangePassword}>Change password</DropdownItem>
+            <DropdownItem onClick={handleChangeEmail}>Change email</DropdownItem>
             <DropdownItem>Recharge money</DropdownItem>
             <DropdownItem>Change email</DropdownItem>
             <DropdownDivider />

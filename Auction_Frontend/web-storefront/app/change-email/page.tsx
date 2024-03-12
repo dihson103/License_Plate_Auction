@@ -4,13 +4,23 @@ import { Button, Card, Label, TextInput } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import { changeEmail } from '../actions/user.action'
 import { toast } from 'react-toastify'
-import { ChangeEvent, useState } from 'react'
-import { ChangeEmailRequest } from '../types/user.type'
+import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function ChangeEmail() {
   const router = useRouter()
   const [id, setId] = useState<string>('')
   const [email, setEmail] = useState<string>('')
+  const { status } = useSession()
+
+  if (status === 'loading') {
+    return <p>Loading...</p>
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('/unauthorize')
+    return
+  }
 
   const handleSubmit = () => {
     changeEmail({ id, email })
