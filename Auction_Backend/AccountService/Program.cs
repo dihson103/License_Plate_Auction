@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using RedisManager;
 using JwtAuthenticationManager;
 using JwtAuthenticationManager.Middlewares;
+using MassTransit;
+using AccountService.Consumers;
 
 namespace AccountService
 {
@@ -45,6 +47,18 @@ namespace AccountService
             {
                 build.WithOrigins("http://localhost:3000", "http://localhost:4000").AllowAnyMethod().AllowAnyHeader();
             }));
+
+            builder.Services.AddMassTransit(x =>
+            {
+                x.AddConsumersFromNamespaceContaining<RechargeRequestedConsumer>();
+
+                x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("account", false));
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             var app = builder.Build();
 

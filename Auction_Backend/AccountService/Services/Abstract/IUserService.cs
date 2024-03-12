@@ -1,5 +1,6 @@
 ﻿using AccountService.Dtos.Auth;
 using AccountService.Dtos.User;
+using Contracts;
 
 namespace AccountService.Services.Abstract
 {
@@ -12,5 +13,6 @@ namespace AccountService.Services.Abstract
         Task UpdateUserEmail(string id, UpdateUserEmailDto userEmailDto);
         Task<UserDto> Register(RegisterUserDto userDto);
         Task UpdateUser(string id, UpdateUserRequest updateUserRequest);
+        Task Recharge(RechargeRequested rechargeRequest);
     }
 }

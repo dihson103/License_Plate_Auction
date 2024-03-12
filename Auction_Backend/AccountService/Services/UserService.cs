@@ -4,6 +4,7 @@ using AccountService.Entities;
 using AccountService.Exceptions;
 using AccountService.Services.Abstract;
 using AutoMapper;
+using Contracts;
 using JwtAuthenticationManager.Abstractions;
 using JwtAuthenticationManager.Models;
 using RedisManager;
@@ -59,6 +60,25 @@ namespace AccountService.Services
             var user = await getUserById(id);
 
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task Recharge(RechargeRequested rechargeRequest)
+        {
+            var user = await getUserById(rechargeRequest.UserId);
+
+            user.Wallet = user.Wallet + rechargeRequest.Amount;
+
+            var isUpdateSuccess = await _userRepository.Update(user);
+
+            if (!isUpdateSuccess)
+            {
+                //TODO handle to push error event to notification service
+                Console.WriteLine($"Recharge fail");
+                return;
+            }
+
+            //TODO handle to push success event to notification service
+            Console.WriteLine($"Recharge success");
         }
 
         public async Task<UserDto> Register(RegisterUserDto userDto)
