@@ -2,7 +2,6 @@
 
 import { Button, Card, Checkbox, Label, TextInput } from 'flowbite-react'
 import { signIn } from 'next-auth/react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 
@@ -22,16 +21,6 @@ export default function Login() {
 
   return (
     <div className='flex flex-col items-center justify-center px-6 lg:h-screen lg:gap-y-12'>
-      <div className='my-6 flex items-center gap-x-1 lg:my-0'>
-        <Image
-          alt='Flowbite logo'
-          src='https://flowbite.com/docs/images/logo.svg'
-          width={40}
-          height={40}
-          className='mr-3 h-12'
-        />
-        <span className='self-center whitespace-nowrap text-2xl font-semibold dark:text-white'>Flowbite</span>
-      </div>
       <Card
         horizontal
         className='w-full md:max-w-screen-sm [&>img]:hidden md:[&>img]:w-96 md:[&>img]:p-0 md:[&>*]:w-full md:[&>*]:p-16 lg:[&>img]:block'

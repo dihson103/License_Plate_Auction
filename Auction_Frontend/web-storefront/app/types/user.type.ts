@@ -16,3 +16,8 @@ export type UserResponse = {
   wallet: number
   address: string
 }
+
+export type ChangeEmailRequest = {
+  id: string
+  email: string
+}

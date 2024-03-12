@@ -16,6 +16,10 @@ export default function ButtonLogin() {
     router.push('register')
   }
 
+  const handleChangePassword = () => {
+    router.push('change-password')
+  }
+
   return (
     <div className='flex md:order-2'>
       {isAuthenticated && (
@@ -25,9 +29,9 @@ export default function ButtonLogin() {
               <span className='block text-sm'>{session?.user.data.fullName}</span>
               <span className='block truncate text-sm font-medium'>{session?.user.data.email}</span>
             </DropdownHeader>
-            <DropdownItem>Dashboard</DropdownItem>
-            <DropdownItem>Settings</DropdownItem>
-            <DropdownItem>Earnings</DropdownItem>
+            <DropdownItem onClick={handleChangePassword}>Change password</DropdownItem>
+            <DropdownItem>Recharge money</DropdownItem>
+            <DropdownItem>Change email</DropdownItem>
             <DropdownDivider />
             <DropdownItem onClick={signOut}>Sign out</DropdownItem>
           </Dropdown>
