@@ -29,3 +29,20 @@ export const accountFormSchema = yup.object({
 })
 
 export type AccountFormSchema = yup.InferType<typeof accountFormSchema>
+
+export const paymentSchema = yup.object({
+  userId: yup.string().required('User id is required'),
+  amount: yup
+    .number()
+    .typeError('Amout of money is integer')
+    .integer('Amout of money is integer')
+    .required('Amount of money is required')
+    .min(1, 'Amount of money must be more than 0'),
+  accountNumber: yup
+    .string()
+    .required('Card number is required')
+    .matches(/^\d+$/, 'Card number is just contain number'),
+  password: yup.string().required('Password is required')
+})
+
+export type PaymentFormSchema = yup.InferType<typeof paymentSchema>

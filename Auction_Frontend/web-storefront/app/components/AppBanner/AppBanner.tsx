@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { Carousel } from 'flowbite-react'
-import Image from 'next/image'
 
 export default function AppBanner() {
   return (

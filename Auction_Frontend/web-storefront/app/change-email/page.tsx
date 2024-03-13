@@ -14,7 +14,7 @@ export default function ChangeEmail() {
   const { status } = useSession()
 
   if (status === 'loading') {
-    return <p>Loading...</p>
+    return <div className='justify-center items-center'>Loading...</div>
   }
 
   if (status === 'unauthenticated') {
@@ -37,7 +37,7 @@ export default function ChangeEmail() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center px-6 lg:h-screen lg:gap-y-12'>
+    <div className='flex flex-col items-center justify-center px-6 bg-slate-100 lg:h-screen lg:gap-y-12'>
       <Card
         horizontal
         className='w-full md:max-w-screen-sm [&>img]:hidden md:[&>img]:w-96 md:[&>img]:p-0 md:[&>*]:w-full md:[&>*]:p-16 lg:[&>img]:block'

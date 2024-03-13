@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using PaymentService.Middlewares;
 using PaymentService.Models;
 using PaymentService.Repositories;
 using PaymentService.Service;
@@ -48,6 +49,8 @@ namespace PaymentService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthorization();
 

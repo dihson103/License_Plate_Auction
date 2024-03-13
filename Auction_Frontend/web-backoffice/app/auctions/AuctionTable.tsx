@@ -14,7 +14,7 @@ type Props = {
 
 export default function AuctionTable({ searchParams }: Props) {
   const [totalPages, setTotalPages] = useState<number>(0)
-  const [auctionList, setAuctionList] = useState<AuctionResponse[]>()
+  const [auctionList, setAuctionList] = useState<AuctionResponse[] | null>()
 
   useEffect(() => {
     getAuctions(searchParams)
@@ -23,6 +23,8 @@ export default function AuctionTable({ searchParams }: Props) {
         setTotalPages(data.totalPages)
       })
       .catch((error: Error) => {
+        setAuctionList(null)
+        setTotalPages(0)
         toast.error(error.message)
       })
   }, [searchParams])
@@ -100,7 +102,7 @@ export default function AuctionTable({ searchParams }: Props) {
           </div>
         </div>
       </div>
-      <AppPagination pageIndex={searchParams.pageIndex || 1} totalPages={totalPages} />
+      {totalPages > 0 && <AppPagination pageIndex={searchParams.pageIndex || 1} totalPages={totalPages} />}
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import { UserSearchParams } from '@/types/users.type'
 import UserTable from './UserTable'
 import SearchUser from './SearchUser'
+import { Suspense } from 'react'
+import AppLoading from '../components/AppLoading'
 
 type Props = {
   searchParams: UserSearchParams
@@ -9,8 +11,10 @@ type Props = {
 export default function Users({ searchParams }: Props) {
   return (
     <div>
-      <SearchUser />
-      <UserTable searchParams={searchParams} />
+      <Suspense fallback={<AppLoading />}>
+        <SearchUser />
+        <UserTable searchParams={searchParams} />
+      </Suspense>
     </div>
   )
 }
