@@ -41,3 +41,8 @@ export const getFilterByFromSearchParams = (status: string | undefined) => {
       return 1
   }
 }
+
+export const convertNumberToVietNamMoney = (num: number) => {
+  const formattedNumber = num.toLocaleString('en-US').replaceAll(',', '.')
+  return formattedNumber + ' vnd'
+}

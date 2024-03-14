@@ -1,6 +1,6 @@
 'use server'
 
-import { SearchResponse } from '@/app/types/auction.type'
+import { AuctionResponse, SearchResponse } from '@/app/types/auction.type'
 import { baseUrl, fetchApi } from './utils.action'
 
 export const getData = async (
@@ -13,4 +13,9 @@ export const getData = async (
 ): Promise<SearchResponse> => {
   const url = `${baseUrl}/search?Page=${pageIndex}&PageSize=4&LisensePlate=${licensePlate}&Status=${status}&City=${city}&KindOfCar=${kindOfCar}&LicenseType=${licenseType}`
   return fetchApi<SearchResponse>(url, null, 'GET')
+}
+
+export const getDataDetail = async (id: number) => {
+  const url = `${baseUrl}/auctions/${id}`
+  return fetchApi<AuctionResponse>(url, null, 'GET')
 }

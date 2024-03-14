@@ -1,15 +1,24 @@
+'use client'
+
 import { Card } from 'flowbite-react'
 import CountDownTimer from '../CountDownTimer'
 import { AuctionResponse } from '@/app/types/auction.type'
+import { useRouter } from 'next/navigation'
 
 interface props {
   auction: AuctionResponse
 }
 
 export default function AppItem({ auction }: props) {
+  const router = useRouter()
+
+  const handleClick = () => {
+    router.push(`/auctions/${auction.id}`)
+  }
+
   return (
     <div>
-      <Card href='#' className='max-w-sm h-40 relative  mb-5'>
+      <Card onClick={handleClick} className='max-w-sm h-40 relative  mb-5 hover:cursor-pointer'>
         <h5 className='text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white'>
           {auction.licensePlate}
         </h5>

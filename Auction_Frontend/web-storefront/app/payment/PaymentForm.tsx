@@ -37,6 +37,10 @@ export default function PaymentForm() {
       })
   })
 
+  const handleGoHome = () => {
+    router.push('/')
+  }
+
   return (
     <div className='space-y'>
       <div className='mb-2 block'>
@@ -58,7 +62,7 @@ export default function PaymentForm() {
       <div className='text-red-600 min-h-5 text-sm'>{errors.amount?.message}</div>
 
       <div className='mb-6 mt-2 flex justify-between'>
-        <Button type='button' gradientDuoTone='purpleToPink'>
+        <Button type='button' gradientDuoTone='purpleToPink' onClick={handleGoHome}>
           Go to home page
         </Button>
         <Button type='button' gradientMonochrome='success' onClick={handlePay}>

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "RedisManager": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51232;http://localhost:51234"
+    }
+  }
+}
