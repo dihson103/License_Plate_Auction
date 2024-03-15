@@ -1,3 +1,4 @@
+using BiddingService.Middlewares;
 using BiddingService.Models;
 using BiddingService.Repositories;
 using BiddingService.Services;
@@ -37,8 +38,9 @@ namespace BiddingService
                 app.UseSwaggerUI();
             }
 
-            app.UseAuthorization();
+            app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -1,4 +1,5 @@
 ﻿using AuctionService.Dtos;
+using AuctionService.Dtos.RedisDto;
 using AuctionService.Entities;
 using AuctionService.Exceptions;
 using AuctionService.Repositories.Abstract;
@@ -7,22 +8,31 @@ using AutoMapper;
 using Contracts;
 using MassTransit;
 using MassTransit.Transports;
+using RedisManager;
 using System.Net;
 
 namespace AuctionService.Services
 {
     public class AuctionsService : IAuctionService
     {
+        private const string PENDING_AUCTION_KEY = "Pending-auction-list";
+
         private readonly IAuctionRepository _repository;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IRedisService _redisService;
+
         public AuctionsService(
-            IAuctionRepository repository, IMapper mapper, IPublishEndpoint publishEndpoint
+            IAuctionRepository repository, 
+            IMapper mapper, 
+            IPublishEndpoint publishEndpoint,
+            IRedisService redisService
             )
         {
             _repository = repository;
             _mapper = mapper;
             _publishEndpoint = publishEndpoint;
+            _redisService = redisService;
         }
 
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)
@@ -36,6 +46,8 @@ namespace AuctionService.Services
             await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(auctionDto));
 
             var isSuccess = await _repository.CreateAuctionAsync(auction);
+
+            await addPendingAuctionToRedis(auction);
 
             if (!isSuccess)
             {
@@ -162,6 +174,49 @@ namespace AuctionService.Services
             if (!isSuccess)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Update auction fail.");
+            }
+            await updateAuctionStatusToRedis(auction);
+        }
+
+        private async Task addPendingAuctionToRedis(Auction auction)
+        {
+            var redisAuction = _mapper.Map<RedisAuctionDto>(auction);
+            var pendingList = await _redisService.GetAsync<List<RedisAuctionDto>>(PENDING_AUCTION_KEY);
+            if (pendingList != null)
+            {
+                var isAuctionExist = pendingList.Any(x => x.Id == auction.AuctionId);
+                if(!isAuctionExist)
+                {
+                    pendingList.Add(redisAuction);
+                }
+            }
+            else
+            {
+                pendingList = new List<RedisAuctionDto> { redisAuction };
+            }
+            await _redisService.SetAsync(PENDING_AUCTION_KEY, pendingList);
+        }
+
+        private async Task deletePendingAuctionFromRedis(int auctionId)
+        {
+            var pendingList = await _redisService.GetAsync<List<RedisAuctionDto>>(PENDING_AUCTION_KEY);
+            if(pendingList != null)
+            {
+                var redisAuction = pendingList.SingleOrDefault(x => x.Id == auctionId);
+                pendingList.Remove(redisAuction);
+            }
+            await _redisService.SetAsync(PENDING_AUCTION_KEY, pendingList);
+        }
+
+        private async Task updateAuctionStatusToRedis(Auction auction)
+        {
+            if(auction.Status == Status.Pending)
+            {
+                await addPendingAuctionToRedis(auction);
+            }
+            else if(auction.Status == Status.InActive)
+            {
+                await deletePendingAuctionFromRedis(auction.AuctionId);
             }
         }
     }

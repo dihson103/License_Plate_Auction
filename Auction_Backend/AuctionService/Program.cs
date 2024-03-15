@@ -6,6 +6,7 @@ using AuctionService.Services;
 using AuctionService.Services.Abstract;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using RedisManager;
 
 namespace AuctionService
 {
@@ -28,6 +29,8 @@ namespace AuctionService
             });
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            builder.Services.AddRedisManager(builder.Configuration);
 
             builder.Services.AddScoped<IAuctionService, AuctionsService>();
             builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();

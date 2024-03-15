@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\RedisManager\RedisManager.csproj" />
   </ItemGroup>
 
 </Project>

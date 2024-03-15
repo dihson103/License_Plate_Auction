@@ -1,4 +1,5 @@
 ﻿using AuctionService.Dtos;
+using AuctionService.Dtos.RedisDto;
 using AuctionService.Entities;
 using AutoMapper;
 using Contracts;
@@ -22,6 +23,9 @@ namespace AuctionService.Helper
                 .IncludeMembers(x => x.Item)
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.AuctionId));
             CreateMap<Item, AuctionUpdated>();
+
+            CreateMap<Auction, RedisAuctionDto>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.AuctionId));
         }
     }
 }
