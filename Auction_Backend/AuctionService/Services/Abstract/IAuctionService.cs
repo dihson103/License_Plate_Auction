@@ -1,4 +1,5 @@
 ﻿using AuctionService.Dtos;
+using AuctionService.Dtos.RedisDto;
 
 namespace AuctionService.Services.Abstract
 {
@@ -10,6 +11,7 @@ namespace AuctionService.Services.Abstract
         Task UpdateAuction(int id, UpdateAuctionDto updateAuctionDto);
         Task DeleteAuction(int id);
         Task<AuctionSearchResponse> SearchAuction(AuctionSearchParams searchParams);
-
+        Task UpdateStatusOfListAuctionToLive(List<RedisAuctionDto> redisAuctionDtos);
+        Task CheckAuctionStatusToChangeToLive();
     }
 }

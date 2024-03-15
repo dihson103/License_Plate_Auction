@@ -59,6 +59,8 @@ namespace AuctionService
                 });
             });
 
+            builder.Services.AddHostedService<CheckAuctionStartService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

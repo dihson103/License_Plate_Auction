@@ -14,5 +14,8 @@ namespace AuctionService.Repositories.Abstract
         Task<List<Auction>> GetAuctionUpdatedByUpdateDate(string updateAt);
         Task<int> GetNewIdInserted();
         Task<(List<Auction> Auctions, int TotalPages)> SearchAuction(AuctionSearchParams searchParams);
+        Task UpdateListAuctionAsync(List<Auction> auctions);
+        Task<Auction> GetByIdAsync(int id);
+        Task<List<Auction>> GetStartLiveListAsync();
     }
 }

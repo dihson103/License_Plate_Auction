@@ -15,7 +15,7 @@ namespace AuctionService.Services
 {
     public class AuctionsService : IAuctionService
     {
-        private const string PENDING_AUCTION_KEY = "Pending-auction-list";
+        private const string LIVE_AUCTION_KEY = "Living-auction-list";
 
         private readonly IAuctionRepository _repository;
         private readonly IMapper _mapper;
@@ -35,6 +35,39 @@ namespace AuctionService.Services
             _redisService = redisService;
         }
 
+        public async Task CheckAuctionStatusToChangeToLive()
+        {
+            var startLiveList = await _repository.GetStartLiveListAsync();
+
+            if(startLiveList.Count > 0)
+            {
+                var updateAuctionTask = updateAuctionStatusToLive(startLiveList);
+                var updateRedisTask = updateLivingListInRedis(startLiveList);
+
+                await Task.WhenAll(updateAuctionTask, updateRedisTask);
+            }
+        }
+
+        private async Task updateAuctionStatusToLive(List<Auction> auctions)
+        {
+            foreach(var auction in auctions)
+            {
+                auction.Status = Status.Live;
+            }
+            await _repository.UpdateListAuctionAsync(auctions);
+        }
+
+        private async Task updateLivingListInRedis(List<Auction> startLiveList)
+        {
+            var redisStartLiveList = _mapper.Map<List<RedisAuctionDto>>(startLiveList);
+
+            var livingList = await _redisService.GetAsync<List<RedisAuctionDto>>(LIVE_AUCTION_KEY) ?? new List<RedisAuctionDto>();
+
+            livingList.AddRange(redisStartLiveList);
+
+            await _redisService.SetAsync(LIVE_AUCTION_KEY, livingList);
+        }
+
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)
         {
             var auction = _mapper.Map<Auction>(createAuctionDto);
@@ -46,8 +79,6 @@ namespace AuctionService.Services
             await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(auctionDto));
 
             var isSuccess = await _repository.CreateAuctionAsync(auction);
-
-            await addPendingAuctionToRedis(auction);
 
             if (!isSuccess)
             {
@@ -175,49 +206,21 @@ namespace AuctionService.Services
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Update auction fail.");
             }
-            await updateAuctionStatusToRedis(auction);
         }
 
-        private async Task addPendingAuctionToRedis(Auction auction)
+        public async Task UpdateStatusOfListAuctionToLive(List<RedisAuctionDto> redisAuctionDtos)
         {
-            var redisAuction = _mapper.Map<RedisAuctionDto>(auction);
-            var pendingList = await _redisService.GetAsync<List<RedisAuctionDto>>(PENDING_AUCTION_KEY);
-            if (pendingList != null)
+            var pendingAuctionsTasks = redisAuctionDtos.Select(async x => await _repository.GetByIdAsync(x.Id));
+            var pendingAuctions = await Task.WhenAll(pendingAuctionsTasks);
+
+            var livingAuctions = pendingAuctions.Select(x =>
             {
-                var isAuctionExist = pendingList.Any(x => x.Id == auction.AuctionId);
-                if(!isAuctionExist)
-                {
-                    pendingList.Add(redisAuction);
-                }
-            }
-            else
-            {
-                pendingList = new List<RedisAuctionDto> { redisAuction };
-            }
-            await _redisService.SetAsync(PENDING_AUCTION_KEY, pendingList);
+                x.Status = Status.Live;
+                return x;
+            }).ToList();
+
+            await _repository.UpdateListAuctionAsync(livingAuctions);
         }
 
-        private async Task deletePendingAuctionFromRedis(int auctionId)
-        {
-            var pendingList = await _redisService.GetAsync<List<RedisAuctionDto>>(PENDING_AUCTION_KEY);
-            if(pendingList != null)
-            {
-                var redisAuction = pendingList.SingleOrDefault(x => x.Id == auctionId);
-                pendingList.Remove(redisAuction);
-            }
-            await _redisService.SetAsync(PENDING_AUCTION_KEY, pendingList);
-        }
-
-        private async Task updateAuctionStatusToRedis(Auction auction)
-        {
-            if(auction.Status == Status.Pending)
-            {
-                await addPendingAuctionToRedis(auction);
-            }
-            else if(auction.Status == Status.InActive)
-            {
-                await deletePendingAuctionFromRedis(auction.AuctionId);
-            }
-        }
     }
 }

@@ -94,6 +94,27 @@ namespace AuctionService.Repositories
             return (auctions, totalPages);
         }
 
+        public async Task UpdateListAuctionAsync(List<Auction> auctions)
+        {
+            _context.Auctions.UpdateRange(auctions);
+            await _context.SaveChangesAsync();
+        }
 
+        public async Task<Auction> GetByIdAsync(int id)
+        {
+            return await _context.Auctions
+                .Include(x => x.Item)
+                .SingleOrDefaultAsync(a => a.AuctionId == id);
+        }
+
+        public async Task<List<Auction>> GetStartLiveListAsync()
+        {
+            var currentDate = DateTime.UtcNow;
+            return await _context.Auctions
+                .Include(x => x.Item)
+                .Where(x => x.Status == Status.Pending && x.StartDateTime <= currentDate)
+                .AsSplitQuery()
+                .ToListAsync();
+        }
     }
 }
