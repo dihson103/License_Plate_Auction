@@ -20,10 +20,17 @@ namespace BiddingService.Repositories
 
         public async Task<int> GetHighestAmount(int auction)
         {
-            var highestBid = await _context.Bids
-                                        .Where(x => x.AuctionId == auction)
-                                        .MaxAsync(x => x.BidAmount);
-            return highestBid;
+            return await _context.Bids
+                .Where(x => x.AuctionId == auction)
+                .MaxAsync(x => x.BidAmount);
+        }
+
+        public async Task<Bidding?> GetWinBid(int auctionId)
+        {
+            return await _context.Bids
+                .Where(x => x.AuctionId == auctionId)
+                .OrderByDescending(x => x.BidAmount)
+                .FirstOrDefaultAsync();
         }
     }
 }

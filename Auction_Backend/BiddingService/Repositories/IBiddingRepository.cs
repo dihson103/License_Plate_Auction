@@ -6,5 +6,6 @@ namespace BiddingService.Repositories
     {
         Task<bool> Add(Bidding bidding);
         Task<int> GetHighestAmount(int auction);
+        Task<Bidding?> GetWinBid(int auctionId);
     }
 }

@@ -3,6 +3,7 @@ using BiddingService.Models;
 using BiddingService.Repositories;
 using BiddingService.Services;
 using Microsoft.EntityFrameworkCore;
+using RedisManager;
 
 namespace BiddingService
 {
@@ -24,10 +25,14 @@ namespace BiddingService
                 option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddRedisManager(builder.Configuration);
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IBiddingRepository, BiddingRepository>();
             builder.Services.AddScoped<IBidService, BidService>();
+
+            builder.Services.AddHostedService<CheckAuctionFinishedService>();
 
             var app = builder.Build();
 

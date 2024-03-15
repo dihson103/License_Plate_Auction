@@ -41,10 +41,10 @@ namespace AuctionService.Services
 
             if(startLiveList.Count > 0)
             {
-                var updateAuctionTask = updateAuctionStatusToLive(startLiveList);
-                var updateRedisTask = updateLivingListInRedis(startLiveList);
+                var updateAuctionStatusToLiveTask = updateAuctionStatusToLive(startLiveList);
+                var updateLivingListInRedisTask = updateLivingListInRedis(startLiveList);
 
-                await Task.WhenAll(updateAuctionTask, updateRedisTask);
+                await Task.WhenAll(updateAuctionStatusToLiveTask, updateLivingListInRedisTask);
             }
         }
 
