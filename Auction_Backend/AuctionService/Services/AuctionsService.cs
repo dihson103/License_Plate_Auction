@@ -15,7 +15,7 @@ namespace AuctionService.Services
 {
     public class AuctionsService : IAuctionService
     {
-        private const string LIVE_AUCTION_KEY = "Living-auction-list";
+        private const string LIVE_AUCTION_KEY = "Living-auctions";
 
         private readonly IAuctionRepository _repository;
         private readonly IMapper _mapper;
@@ -41,6 +41,10 @@ namespace AuctionService.Services
 
             if(startLiveList.Count > 0)
             {
+                foreach(var auction in startLiveList)
+                {
+                    auction.Status = Status.Live;
+                }
                 var updateAuctionStatusToLiveTask = updateAuctionStatusToLive(startLiveList);
                 var updateLivingListInRedisTask = updateLivingListInRedis(startLiveList);
 
@@ -52,7 +56,6 @@ namespace AuctionService.Services
         {
             foreach (var auction in auctions)
             {
-                auction.Status = Status.Live;
                 await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
             }
 
@@ -68,6 +71,7 @@ namespace AuctionService.Services
             livingList.AddRange(redisStartLiveList);
 
             await _redisService.SetAsync(LIVE_AUCTION_KEY, livingList);
+
         }
 
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)

@@ -12,7 +12,7 @@ namespace BiddingService.Services;
 
 public class BidService : IBidService
 {
-    private const string LIVE_AUCTION_KEY = "Living-auction-list";
+    private const string LIVE_AUCTION_KEY = "Living-auctions";
 
     private readonly IBiddingRepository _repository;
     private readonly IMapper _mapper;
@@ -104,8 +104,8 @@ public class BidService : IBidService
             return;
         }
 
-        var currentDate = DateTime.UtcNow;
-        var finishedList = livingList.Where(x => x.EndDateTime >= currentDate).ToList();
+        var date = DateTime.Now;
+        var finishedList = livingList.Where(x => x.EndDateTime < date).ToList();
 
         if(finishedList == null || finishedList.Count <= 0)
         {
@@ -144,7 +144,10 @@ public class BidService : IBidService
         List<RedisAuctionDto> livingList, List<RedisAuctionDto> finishedList
         )
     {
-        livingList.RemoveAll(x => finishedList.Any(a => a.Id == x.Id));
+        foreach (var auction in finishedList)
+        {
+            livingList.Remove(auction);
+        }
         await _redisService.SetAsync(LIVE_AUCTION_KEY, livingList);
     }
 }
