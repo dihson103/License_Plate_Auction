@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiddingService", "BiddingService\BiddingService.csproj", "{F3B01910-DC96-4BB7-B65B-FAEE5B622C83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "NotificationService\NotificationService.csproj", "{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{F3B01910-DC96-4BB7-B65B-FAEE5B622C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3B01910-DC96-4BB7-B65B-FAEE5B622C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3B01910-DC96-4BB7-B65B-FAEE5B622C83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{5B289875-691C-442F-AABA-4EE7165BBFA0} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 		{54D9EE11-37B2-4818-ABD6-353734FD262F} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 		{F3B01910-DC96-4BB7-B65B-FAEE5B622C83} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
+		{65E8C6F7-CE4B-4679-BE7E-293B08587BD3} = {0ECE041F-A399-45D0-B913-4866D2E2C0E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {011830C0-E983-4F5C-9A0E-F8774FCE0D63}
