@@ -61,6 +61,8 @@ namespace AuctionService
 
             builder.Services.AddHostedService<CheckAuctionStartService>();
 
+            builder.Services.AddGrpc();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -75,6 +77,7 @@ namespace AuctionService
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapGrpcService<GrpcAuctionService>();
 
             try
             {

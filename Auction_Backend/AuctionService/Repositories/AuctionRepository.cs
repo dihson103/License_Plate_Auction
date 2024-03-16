@@ -112,7 +112,7 @@ namespace AuctionService.Repositories
             var currentDate = DateTime.UtcNow;
             return await _context.Auctions
                 .Include(x => x.Item)
-                .Where(x => x.Status == Status.Pending && x.StartDateTime <= currentDate)
+                .Where(x => x.Status == Status.Pending && x.StartDateTime <= currentDate && x.EndDateTime > currentDate)
                 .AsSplitQuery()
                 .ToListAsync();
         }

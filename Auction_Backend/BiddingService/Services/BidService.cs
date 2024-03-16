@@ -18,17 +18,21 @@ public class BidService : IBidService
     private readonly IMapper _mapper;
     private readonly IRedisService _redisService;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly GrpcAuctionClient _grpcClient;
+
     public BidService(
         IBiddingRepository repository,  
         IMapper mapper, 
         IRedisService redisService,
-        IPublishEndpoint publishEndpoint
+        IPublishEndpoint publishEndpoint,
+        GrpcAuctionClient grpcClient
         )
     {
         _repository = repository;
         _mapper = mapper;
         _redisService = redisService;
         _publishEndpoint = publishEndpoint;
+        _grpcClient = grpcClient;
     }
 
     public async Task Bid(string userId, BidRequest bidRequest)
@@ -38,9 +42,14 @@ public class BidService : IBidService
             throw new UserIdConflictException();
         }
 
-        await checkAuctionValid(bidRequest.AuctionId);
+        var auction = await getAuctionLiving(bidRequest.AuctionId);
 
-        await checkBidAmountValid(bidRequest);
+        if(auction == null)
+        {
+            throw new AuctionLiveIsNotFoundException();
+        }
+
+        await checkBidAmountValid(bidRequest, auction);
 
         var bidding = _mapper.Map<Bidding>(bidRequest);
 
@@ -52,8 +61,13 @@ public class BidService : IBidService
         }
     }
 
-    private async Task checkBidAmountValid(BidRequest bidRequest)
+    private async Task checkBidAmountValid(BidRequest bidRequest, RedisAuctionDto auction)
     {
+        if(bidRequest.BidAmount <= auction.ReservePrice)
+        {
+            throw new BidAmountIsTooLowException();
+        }
+
         var highestAmount = await _repository.GetHighestAmount(bidRequest.AuctionId);
         
         if(bidRequest.BidAmount <= highestAmount)
@@ -62,9 +76,23 @@ public class BidService : IBidService
         }
     }
 
-    private async Task checkAuctionValid(int auctionId)
+    private async Task<RedisAuctionDto?> getAuctionLiving(int auctionId)
     {
-        //call to auction service by grpc to check auction is live or not
+        var livingList = await GetAuctionLivingListFromRedis();
+        
+        if (livingList != null && livingList.Count > 0)
+        {
+            var redisAuction = livingList.SingleOrDefault(x => x.Id == auctionId && x.EndDateTime <= DateTime.UtcNow);
+
+            if(redisAuction != null)
+            {
+                return redisAuction;
+            }
+        }
+        //call to auction service by grpc to get auction
+        var auction = _grpcClient.GetAuction(auctionId);
+
+        return auction;
     }
 
     public async Task CheckAuctionFinished()

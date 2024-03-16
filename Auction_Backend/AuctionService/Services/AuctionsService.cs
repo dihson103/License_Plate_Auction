@@ -50,10 +50,12 @@ namespace AuctionService.Services
 
         private async Task updateAuctionStatusToLive(List<Auction> auctions)
         {
-            foreach(var auction in auctions)
+            foreach (var auction in auctions)
             {
                 auction.Status = Status.Live;
+                await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
             }
+
             await _repository.UpdateListAuctionAsync(auctions);
         }
 

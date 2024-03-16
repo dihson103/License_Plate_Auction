@@ -2,6 +2,7 @@ using BiddingService.Middlewares;
 using BiddingService.Models;
 using BiddingService.Repositories;
 using BiddingService.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RedisManager;
 
@@ -33,6 +34,19 @@ namespace BiddingService
             builder.Services.AddScoped<IBidService, BidService>();
 
             builder.Services.AddHostedService<CheckAuctionFinishedService>();
+
+            builder.Services.AddScoped<GrpcAuctionClient>();
+
+            builder.Services.AddMassTransit(x =>
+            {
+
+                x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("bid", false));
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             var app = builder.Build();
 
