@@ -1,6 +1,7 @@
 import { getDataDetail } from '@/app/actions/auction.action'
 import CountDownTimer from '@/app/components/CountDownTimer'
 import AuctionDetailTable from './AuctionDetailTable'
+import BidList from './BidList'
 
 export default async function page({ params }: { params: { id: number } }) {
   const auction = await getDataDetail(params.id)
@@ -15,15 +16,13 @@ export default async function page({ params }: { params: { id: number } }) {
           <CountDownTimer auctionEnd={auction.endDateTime} />
         </div>
       </div>
-      <div className='grid grid-cols-2 gap-6 mt-5'>
-        <div className='w-full bg-gray-200 rounded-lg overflow-hidden'>
-          <h3 className='text-7xl font-semibold text-center mt-5 mb-5'>{auction.licensePlate}</h3>
-          <AuctionDetailTable auction={auction} />
+      <div className='grid grid-cols-2 gap-6 mt-5 mb-5'>
+        <div className='w-full bg-gray-200 rounded-lg overflow-hidden flex flex-col justify-center items-center h-full'>
+          <h3 className='text-8xl font-semibold'>{auction.licensePlate}</h3>
         </div>
-        <div className='border-2 rounded-lg p-2 bg-gray-100'>
-          <h3>Bid</h3>
-        </div>
+        <BidList startingPrice={auction.reservePrice} />
       </div>
+      <AuctionDetailTable auction={auction} />
     </div>
   )
 }

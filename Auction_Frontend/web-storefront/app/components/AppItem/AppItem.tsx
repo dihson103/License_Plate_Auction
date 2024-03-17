@@ -4,6 +4,7 @@ import { Card } from 'flowbite-react'
 import CountDownTimer from '../CountDownTimer'
 import { AuctionResponse } from '@/app/types/auction.type'
 import { useRouter } from 'next/navigation'
+import CurrentHighBid from './CurrentHighBid'
 
 interface props {
   auction: AuctionResponse
@@ -24,6 +25,9 @@ export default function AppItem({ auction }: props) {
         </h5>
         <div className='absolute bottom-2 left-2'>
           <CountDownTimer auctionEnd={auction.endDateTime} />
+        </div>
+        <div className='absolute top-2 right-2'>
+          <CurrentHighBid amount={auction.currentHighBid || undefined} />
         </div>
       </Card>
     </div>
