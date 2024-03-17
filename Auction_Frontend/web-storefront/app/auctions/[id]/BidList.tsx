@@ -1,7 +1,12 @@
+'use client'
+
 import BidItem from './BidItem'
 import { convertNumberToVietNamMoney } from '@/app/utils/utils'
 import { getBidsOfAuction } from '@/app/actions/bid.action'
 import BidForm from './BidForm'
+import { useBidsStore } from '@/app/hooks/useBidsStore'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = {
   startingPrice: number
@@ -9,9 +14,26 @@ type Props = {
   isLive: boolean
 }
 
-export default async function BidList({ startingPrice, auctionId, isLive }: Props) {
-  const bidsList = await getBidsOfAuction(auctionId)
-  const currentHighBid = bidsList.reduce((prev, current) => (prev > current.amount ? prev : current.amount), 0)
+export default function BidList({ startingPrice, auctionId, isLive }: Props) {
+  const [loading, setLoading] = useState(true)
+  const bidsList = useBidsStore((state) => state.bids)
+  const setBids = useBidsStore((state) => state.setBids)
+  const currentHighBid = useBidsStore((state) => state.currentHighBid)
+
+  useEffect(() => {
+    getBidsOfAuction(auctionId)
+      .then((data) => {
+        setBids(data)
+      })
+      .catch((error: Error) => {
+        toast.error(error.message)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [auctionId, setBids, setLoading])
+
+  if (loading) return <span>Loading bids...</span>
 
   return (
     <div className='rounded-lg shadow bg-slate-50 dark:bg-gray-700'>

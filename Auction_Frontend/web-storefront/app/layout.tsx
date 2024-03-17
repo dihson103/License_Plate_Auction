@@ -3,6 +3,7 @@ import './globals.css'
 import { ThemeModeScript } from 'flowbite-react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import SignalrProvider from './providers/SignalrProvider'
 
 export const metadata: Metadata = {
   title: 'Lisence auction',
@@ -20,7 +21,7 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body>
-        {children}
+        <SignalrProvider>{children}</SignalrProvider>
         <ToastContainer />
       </body>
     </html>

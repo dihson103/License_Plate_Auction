@@ -1,4 +1,5 @@
 using MassTransit;
+using NotificationService.Consumers;
 using NotificationService.Hubs;
 
 namespace NotificationService
@@ -11,6 +12,7 @@ namespace NotificationService
 
             builder.Services.AddMassTransit(x =>
             {
+                x.AddConsumersFromNamespaceContaining<BidPlacedConsumer>();
 
                 x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("notification", false));
 
