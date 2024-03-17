@@ -6,3 +6,9 @@ export type BidResponse = {
   bidderName: string
   amount: number
 }
+
+export type BidRequest = {
+  userId: string
+  auctionId: number
+  bidAmount: number
+}

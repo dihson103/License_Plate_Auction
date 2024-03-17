@@ -27,10 +27,17 @@ namespace GatewayService
                 });
             });
 
+            builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+            {
+                build.WithOrigins("http://localhost:3000", "http://localhost:4000").AllowAnyMethod().AllowAnyHeader();
+            }));
+
             builder.Services.AddReverseProxy()
                 .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
             var app = builder.Build();
+
+            app.UseCors("corspolicy");
 
             app.UseMiddleware<JwtAuthenticationMiddleware>();
 

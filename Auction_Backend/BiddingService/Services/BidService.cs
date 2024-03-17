@@ -178,7 +178,7 @@ public class BidService : IBidService
 
         if (bids == null || bids.Count <= 0)
         {
-            throw new BidsNotFoundException();
+            return new List<BidResponse>();
         }
 
         return _mapper.Map<List<BidResponse>>(bids);

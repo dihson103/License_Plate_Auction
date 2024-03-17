@@ -22,6 +22,7 @@ namespace BiddingService.Repositories
         {
             return await _context.Bids
                .Where(b => b.AuctionId == auctionId)
+               .OrderByDescending(b => b.BidAmount)
                .ToListAsync();
         }
 

@@ -20,7 +20,7 @@ export default async function page({ params }: { params: { id: number } }) {
         <div className='w-full bg-gray-200 rounded-lg overflow-hidden flex flex-col justify-center items-center h-full'>
           <h3 className='text-8xl font-semibold'>{auction.licensePlate}</h3>
         </div>
-        <BidList startingPrice={auction.reservePrice} />
+        <BidList startingPrice={auction.reservePrice} auctionId={auction.id} />
       </div>
       <AuctionDetailTable auction={auction} />
     </div>
