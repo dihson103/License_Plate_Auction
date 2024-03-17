@@ -35,7 +35,7 @@ public class BidService : IBidService
         _grpcClient = grpcClient;
     }
 
-    public async Task Bid(string userId, BidRequest bidRequest)
+    public async Task Bid(string userId, string fullName, BidRequest bidRequest)
     {
         if(userId != bidRequest.UserId)
         {
@@ -52,13 +52,22 @@ public class BidService : IBidService
         await checkBidAmountValid(bidRequest, auction);
 
         var bidding = _mapper.Map<Bidding>(bidRequest);
+        bidding.FullName = fullName;
 
         var result = await _repository.Add(bidding);
+
+        await pushEventBidPlaced(bidding);
 
         if (!result)
         {
             throw new AddBiddingException();
         }
+    }
+
+    private async Task pushEventBidPlaced(Bidding bidding)
+    {
+        var bidPlaced = _mapper.Map<BidPlaced>(bidding);
+        await _publishEndpoint.Publish<BidPlaced>(bidPlaced);   
     }
 
     private async Task checkBidAmountValid(BidRequest bidRequest, RedisAuctionDto auction)
@@ -149,5 +158,29 @@ public class BidService : IBidService
             livingList.Remove(auction);
         }
         await _redisService.SetAsync(LIVE_AUCTION_KEY, livingList);
+    }
+
+    public async Task<List<BidResponse>> GetBidsOfUser(string userId)
+    {
+        var bids = await _repository.GetBidsOfUserId(userId);
+
+        if(bids == null || bids.Count <= 0)
+        {
+            throw new BidsNotFoundException();
+        }
+
+        return _mapper.Map<List<BidResponse>>(bids);
+    }
+
+    public async Task<List<BidResponse>> GetBidsOfAuction(int auctionId)
+    {
+        var bids = await _repository.GetBidsOfAuction(auctionId);
+
+        if (bids == null || bids.Count <= 0)
+        {
+            throw new BidsNotFoundException();
+        }
+
+        return _mapper.Map<List<BidResponse>>(bids);
     }
 }

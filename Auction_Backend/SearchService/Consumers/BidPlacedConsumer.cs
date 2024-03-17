@@ -15,11 +15,13 @@ namespace SearchService.Consumers
         {
             Console.WriteLine("---> Consumimg bid placed in search service");
 
-            var auction = await _auctionService.GetById(context.Message.AuctionId);
-            if (context.Message.BidStatus.Contains("Accepted")
-                && auction.CurrentHighBid < context.Message.Amount)
+            var bidPlaced = context.Message;
+
+            var auction = await _auctionService.GetById(bidPlaced.AuctionId);
+            var currentHighest = auction.CurrentHighBid ?? 0;
+            if (currentHighest < bidPlaced.Amount)
             {
-                auction.CurrentHighBid = context.Message.Amount;
+                auction.CurrentHighBid = bidPlaced.Amount;
                 await _auctionService.Update(auction);
             }
             else

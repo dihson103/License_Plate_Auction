@@ -13,16 +13,16 @@ namespace AuctionService.Consumers
         }
         public async Task Consume(ConsumeContext<BidPlaced> context)
         {
-            var auctionId = context.Message.Id;
+            var bidPlaced = context.Message;
 
             Console.WriteLine($"---> Consuming bid placed in auction service");
 
-            var auction = _auctionRepository.GetById( auctionId );
+            var auction = _auctionRepository.GetById( bidPlaced.AuctionId );
 
-            if(context.Message.BidStatus.Contains("Accepted") 
-                && auction.CurrentHighBid < context.Message.Amount)
+            var currentHighest = auction.CurrentHighBid ?? 0;
+            if (currentHighest < bidPlaced.Amount)
             {
-                auction.CurrentHighBid = context.Message.Amount;
+                auction.CurrentHighBid = bidPlaced.Amount;
                 await _auctionRepository.UpdateAuctionAsync(auction);
             }
             else

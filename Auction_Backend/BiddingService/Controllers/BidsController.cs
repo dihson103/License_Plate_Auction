@@ -20,8 +20,16 @@ namespace BiddingService.Controllers
         {
             //var userId = HttpContext.Request.Headers["User-Id"];
             var userId = "HE160021";
-            await _bidService.Bid(userId, bidRequest);
+            var fullName = "Nguyen Dinh Son";
+            await _bidService.Bid(userId, fullName, bidRequest);
             return NoContent();
+        }
+
+        [HttpGet("{auctionId}")]
+        public async Task<IActionResult> GetByAuctionId([FromRoute] int auctionId)
+        {
+            var result = await _bidService.GetBidsOfAuction(auctionId);
+            return Ok(result);
         }
     }
 }
