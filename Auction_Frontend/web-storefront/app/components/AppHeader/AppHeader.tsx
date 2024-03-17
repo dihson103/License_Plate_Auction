@@ -6,7 +6,7 @@ import { IoCarSportOutline } from 'react-icons/io5'
 export default function AppHeader() {
   return (
     <Navbar fluid rounded className='shadow-md'>
-      <NavbarBrand href='https://flowbite-react.com' className='text-red-600'>
+      <NavbarBrand href='/auctions' className='text-red-600'>
         <IoCarSportOutline size={34} className='mr-1' />
         <span className='self-center whitespace-nowrap text-xl font-semibold dark:text-white'>
           Lisense Plate Auction

@@ -9,12 +9,18 @@ import { toast } from 'react-toastify'
 type Props = {
   currentHighestPrice: number
   auctionId: number
+  isLive: boolean
 }
 
-export default function BidForm({ currentHighestPrice, auctionId }: Props) {
+export default function BidForm({ currentHighestPrice, auctionId, isLive }: Props) {
   const [amount, setAmount] = useState<number | null>(null)
 
   const handleBid = () => {
+    if (!isLive) {
+      toast.error('The auction is not live')
+      return
+    }
+
     if (amount == null) {
       toast.error('Please input bid amount')
       setAmount(null)
@@ -50,6 +56,7 @@ export default function BidForm({ currentHighestPrice, auctionId }: Props) {
         value={amount === null ? '' : amount}
         onChange={(e) => setAmount(Number(e.target.value))}
         placeholder='Input your bid amount'
+        readOnly={!isLive}
       />
       <Button gradientMonochrome='teal' onClick={handleBid} type='button'>
         <IoSendOutline size={20} />

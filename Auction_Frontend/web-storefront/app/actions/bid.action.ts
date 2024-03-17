@@ -1,9 +1,9 @@
 import { BidRequest, BidResponse } from '../types/bid.type'
-import { baseUrl, fetchApi } from './utils.action'
+import { baseUrl, fetchApi, fetchApiWithOutCache } from './utils.action'
 
 export const getBidsOfAuction = (id: number) => {
   const url = `${baseUrl}/bids/${id}`
-  return fetchApi<BidResponse[]>(url, null, 'GET')
+  return fetchApiWithOutCache<BidResponse[]>(url)
 }
 
 export const bidAuction = ({ auctionId, amount }: { auctionId: number; amount: number }) => {

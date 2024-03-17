@@ -6,9 +6,10 @@ import BidForm from './BidForm'
 type Props = {
   startingPrice: number
   auctionId: number
+  isLive: boolean
 }
 
-export default async function BidList({ startingPrice, auctionId }: Props) {
+export default async function BidList({ startingPrice, auctionId, isLive }: Props) {
   const bidsList = await getBidsOfAuction(auctionId)
   const currentHighBid = bidsList.reduce((prev, current) => (prev > current.amount ? prev : current.amount), 0)
 
@@ -34,7 +35,7 @@ export default async function BidList({ startingPrice, auctionId }: Props) {
           </>
         )}
       </div>
-      <BidForm currentHighestPrice={currentHighBid} auctionId={auctionId} />
+      <BidForm currentHighestPrice={currentHighBid} isLive={isLive} auctionId={auctionId} />
     </div>
   )
 }

@@ -31,3 +31,15 @@ export const fetchApi = async <T>(url: string, body: string | null, method: 'GET
 }
 
 export const baseUrl = 'http://localhost:6001'
+
+export const fetchApiWithOutCache = async <T>(url: string) => {
+  const result = await fetch(url, { cache: 'no-cache' })
+  if (!result.ok) {
+    const errorJsonData = await result.json()
+    const error = errorJsonData as ApiError
+    throw new Error(error.message)
+  }
+
+  const jsonData = await result.json()
+  return jsonData as T
+}
