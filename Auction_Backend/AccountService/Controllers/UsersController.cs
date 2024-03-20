@@ -74,5 +74,12 @@ namespace AccountService.Controllers
             await _userService.UpdateUserEmail(id, updateUserEmailDto);
             return NoContent();
         }
+
+        [HttpGet("count")]
+        public async Task<IActionResult> CountUsers()
+        {
+            var result = await _userService.GetUsersCount();
+            return Ok(result);
+        }
     }
 }

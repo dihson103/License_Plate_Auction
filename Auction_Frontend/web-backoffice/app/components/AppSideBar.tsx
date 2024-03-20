@@ -5,6 +5,7 @@ import { RiAuctionLine } from 'react-icons/ri'
 import { RxDashboard } from 'react-icons/rx'
 import AppSideBarLink from './AppSideBarLink'
 import { GrUserAdmin } from 'react-icons/gr'
+import LogoutButton from './LogoutButton'
 
 export default function AppSideBar() {
   return (
@@ -28,10 +29,7 @@ export default function AppSideBar() {
             <RiAuctionLine size={24} className='mr-2' />
           </AppSideBarLink>
 
-          <a href='#' className='flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700'>
-            <LuLogOut size={24} className='mr-2' />
-            Logout
-          </a>
+          <LogoutButton />
         </nav>
       </div>
     </div>

@@ -21,12 +21,8 @@ export default function RootLayout({
       <head>
         <ThemeModeScript />
       </head>
-      <body className='flex h-screen bg-gray-100'>
-        <AppSideBar />
-        <div className='flex flex-col flex-1 overflow-y-auto'>
-          <AppNavBar />
-          <div className='p-4'>{children}</div>
-        </div>
+      <body>
+        {children}
         <ToastContainer />
       </body>
     </html>

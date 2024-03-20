@@ -116,5 +116,42 @@ namespace AuctionService.Repositories
                 .AsSplitQuery()
                 .ToListAsync();
         }
+
+        public async Task<bool> IsLisensePlateExist(string lisensePlate)
+        {
+            return await _context.Auctions
+                .Include(x => x.Item)
+                .AnyAsync(x => x.Item.LicensePlate == lisensePlate);   
+        }
+
+        public async Task<List<Auction>> GetAuctionsOfWinner(string winner)
+        {
+            return await _context.Auctions
+                .Include(x => x.Item)
+                .Where(x => x.Winner == winner)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<int> GetNumberLiving()
+        {
+            return await _context.Auctions
+                .Where(x => x.Status == Status.Live)
+                .CountAsync();
+        }
+
+        public async Task<int> GetNumberFinished()
+        {
+            return await _context.Auctions
+                .Where(x => x.Status == Status.Finished)
+                .CountAsync();
+        }
+
+        public async Task<int> GetTotalMoney()
+        {
+            return await _context.Auctions
+                .Where(x => x.Status == Status.Finished)
+                .SumAsync(x => x.CurrentHighBid ?? 0);
+        }
     }
 }

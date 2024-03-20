@@ -36,6 +36,7 @@ namespace BiddingService
             builder.Services.AddHostedService<CheckAuctionFinishedService>();
 
             builder.Services.AddScoped<GrpcAuctionClient>();
+            builder.Services.AddScoped<GrpcUserClient>();
 
             builder.Services.AddMassTransit(x =>
             {

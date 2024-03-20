@@ -1,7 +1,11 @@
+import { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt'
+  },
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -38,4 +42,6 @@ export default NextAuth({
   pages: {
     signIn: '/login'
   }
-})
+}
+
+export default NextAuth(authOptions)

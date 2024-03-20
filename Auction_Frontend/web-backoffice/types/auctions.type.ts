@@ -49,3 +49,9 @@ export type CreateAuction = {
   status: string
   reservePrice: number
 }
+
+export type CardAuction = {
+  totalFinished: number
+  totalLive: number
+  totalMoney: number
+}

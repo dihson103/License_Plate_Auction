@@ -30,6 +30,11 @@ namespace AccountService.Repositories
             return await _context.Users.FirstOrDefaultAsync(x => x.Email == value || x.Id == value);
         }
 
+        public async Task<int> GetTotalUsers()
+        {
+            return await _context.Users.CountAsync();
+        }
+
         public async Task<bool> IsEmailExist(string email)
         {
             return await _context.Users.AnyAsync(x => x.Email == email);   

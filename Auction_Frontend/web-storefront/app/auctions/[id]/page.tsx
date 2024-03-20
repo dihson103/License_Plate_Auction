@@ -5,6 +5,7 @@ import BidList from './BidList'
 
 export default async function page({ params }: { params: { id: number } }) {
   const auction = await getDataDetail(params.id)
+  console.log(auction)
   return (
     <div className='container mx-auto pt-10'>
       <div className='flex justify-between'>

@@ -2,6 +2,7 @@
 
 import { bidAuction } from '@/app/actions/bid.action'
 import { Button, TextInput } from 'flowbite-react'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { IoSendOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
@@ -14,6 +15,8 @@ type Props = {
 
 export default function BidForm({ currentHighestPrice, auctionId, isLive }: Props) {
   const [amount, setAmount] = useState<number | null>(null)
+  const { data: session } = useSession()
+  const isAuthenticated = session?.user ? true : false
 
   const handleBid = () => {
     if (!isLive) {
@@ -39,7 +42,11 @@ export default function BidForm({ currentHighestPrice, auctionId, isLive }: Prop
       return
     }
 
-    bidAuction({ auctionId, amount })
+    if (session?.user == null) {
+      return
+    }
+
+    bidAuction({ auctionId, amount, user: session.user })
       .then((data) => {
         toast.success('Send bid auction request success')
       })
@@ -47,6 +54,8 @@ export default function BidForm({ currentHighestPrice, auctionId, isLive }: Prop
         toast.error(error.message)
       })
   }
+
+  if (!isAuthenticated) return <h3>Login to bid</h3>
 
   return (
     <div className='flex items-center px-3 py-2 rounded-lg'>

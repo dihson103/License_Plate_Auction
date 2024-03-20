@@ -1,7 +1,8 @@
 'use server'
 
 import { AuctionResponse, SearchResponse } from '@/app/types/auction.type'
-import { baseUrl, fetchApi } from './utils.action'
+import { baseUrl, fetchApi, fetchApiWithOutCache } from './utils.action'
+import { AuthResponse } from '../types/auth.type'
 
 export const getData = async (
   pageIndex: number = 1,
@@ -17,5 +18,10 @@ export const getData = async (
 
 export const getDataDetail = async (id: number) => {
   const url = `${baseUrl}/auctions/${id}`
-  return fetchApi<AuctionResponse>(url, null, 'GET')
+  return fetchApiWithOutCache<AuctionResponse>(url)
+}
+
+export const getAuctionsOfUser = async (user: AuthResponse) => {
+  const url = `${baseUrl}/auctions/me`
+  return fetchApi<AuctionResponse[]>(url, null, 'GET', user)
 }

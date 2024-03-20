@@ -1,8 +1,23 @@
+'use client'
+
 /* eslint-disable @next/next/no-img-element */
 import { Card } from 'flowbite-react'
 import PaymentForm from './PaymentForm'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function Payment() {
+  const { status } = useSession()
+  const router = useRouter()
+
+  if (status === 'loading') {
+    return <span>Loading...</span>
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('login')
+    return
+  }
   return (
     <div className='flex flex-col items-center justify-center px-6 bg-slate-100 lg:h-screen lg:gap-y-12'>
       <Card

@@ -60,6 +60,8 @@ namespace AccountService
                 });
             });
 
+            builder.Services.AddGrpc();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -78,6 +80,7 @@ namespace AccountService
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapGrpcService<GrpcUserService>();
 
             try
             {

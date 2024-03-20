@@ -56,5 +56,20 @@ namespace AuctionService.Controllers
             await _auctionService.DeleteAuction(id);
             return NoContent();
         }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetAuctionOfWinner()
+        {
+            var userId = HttpContext.Request.Headers["User-Id"];
+            var resutl = await _auctionService.GetAuctionsOfWinner(userId);
+            return Ok(resutl);
+        }
+
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetDashboardInfo()
+        {
+            var result = await _auctionService.GetDashboardCount();
+            return Ok(result);
+        }
     }
 }

@@ -1,9 +1,7 @@
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Payment',
-  description: 'Payment page'
-}
+import { SessionProvider } from 'next-auth/react'
+
 export default function PaymentLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+  return <SessionProvider>{children}</SessionProvider>
 }

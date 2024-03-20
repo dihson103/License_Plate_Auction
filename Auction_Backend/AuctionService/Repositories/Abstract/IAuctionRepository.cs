@@ -17,5 +17,10 @@ namespace AuctionService.Repositories.Abstract
         Task UpdateListAuctionAsync(List<Auction> auctions);
         Task<Auction> GetByIdAsync(int id);
         Task<List<Auction>> GetStartLiveListAsync();
+        Task<bool> IsLisensePlateExist(string lisensePlate);
+        Task<List<Auction>> GetAuctionsOfWinner(string winner);
+        Task<int> GetNumberLiving();
+        Task<int> GetNumberFinished();
+        Task<int> GetTotalMoney();
     }
 }

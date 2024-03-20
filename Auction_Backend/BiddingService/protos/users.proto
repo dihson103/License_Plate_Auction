@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "BiddingService";
+
+service GrpcUser {
+	rpc GetUser (GetUserRequest) returns (GrpcUserResponse);
+}
+
+message GetUserRequest {
+	string Id = 1;
+}
+
+message GrpcUserModel {
+	string Id = 1;
+	double Wallet = 2;
+	bool Status = 3;
+}
+
+message GrpcUserResponse {
+	GrpcUserModel Data = 1;
+}

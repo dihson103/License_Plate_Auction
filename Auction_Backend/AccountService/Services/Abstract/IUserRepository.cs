@@ -12,5 +12,6 @@ namespace AccountService.Services.Abstract
         Task<bool> IsEmailExist(string email);
         Task<bool> IsUserIdExist(string id);
         Task<UserAccount> GetByIdOrEmailAsync(string value);
+        Task<int> GetTotalUsers();
     }
 }

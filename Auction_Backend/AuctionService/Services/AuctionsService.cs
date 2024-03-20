@@ -23,8 +23,8 @@ namespace AuctionService.Services
         private readonly IRedisService _redisService;
 
         public AuctionsService(
-            IAuctionRepository repository, 
-            IMapper mapper, 
+            IAuctionRepository repository,
+            IMapper mapper,
             IPublishEndpoint publishEndpoint,
             IRedisService redisService
             )
@@ -39,9 +39,9 @@ namespace AuctionService.Services
         {
             var startLiveList = await _repository.GetStartLiveListAsync();
 
-            if(startLiveList.Count > 0)
+            if (startLiveList.Count > 0)
             {
-                foreach(var auction in startLiveList)
+                foreach (var auction in startLiveList)
                 {
                     auction.Status = Status.Live;
                 }
@@ -76,6 +76,12 @@ namespace AuctionService.Services
 
         public async Task<AuctionDto> CreateAuction(CreateAuctionDto createAuctionDto)
         {
+            var isItemExist = await _repository.IsLisensePlateExist(createAuctionDto.LicensePlate);
+            if (isItemExist)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, $"Item is already exist");
+            }
+
             var auction = _mapper.Map<Auction>(createAuctionDto);
 
             var newId = await _repository.GetNewIdInserted();
@@ -98,12 +104,12 @@ namespace AuctionService.Services
         {
             var auction = _repository.GetById(id);
 
-            if(auction == null)
+            if (auction == null)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"Can not found auction has id: {id}");
             }
 
-            if(auction.Status != Status.InActive && auction.Status != Status.Pending)
+            if (auction.Status != Status.InActive && auction.Status != Status.Pending)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "This auction is was used.");
             }
@@ -111,7 +117,7 @@ namespace AuctionService.Services
             await _publishEndpoint.Publish(new AuctionDeleted { Id = id });
 
             var isSuccess = await _repository.DeleteAuctionAsync(auction);
-            if(!isSuccess)
+            if (!isSuccess)
             {
                 throw new MyException((int)HttpStatusCode.BadRequest, "Delete auction fail.");
             }
@@ -121,7 +127,7 @@ namespace AuctionService.Services
         {
             List<Auction> auctions = null;
 
-            if(updateAt != null)
+            if (updateAt != null)
             {
                 auctions = _repository.GetAuctionUpdatedByUpdateDate(updateAt).Result;
             }
@@ -142,7 +148,7 @@ namespace AuctionService.Services
         {
             var isAuctionExist = _repository.HasAuction(id);
 
-            if(isAuctionExist)
+            if (isAuctionExist)
             {
                 var auction = _repository.GetById(id);
                 return _mapper.Map<AuctionDto>(auction);
@@ -158,7 +164,7 @@ namespace AuctionService.Services
             var totalPages = result.TotalPages;
             var auctions = result.Auctions;
 
-            if(auctions.Count <= 0)
+            if (auctions.Count <= 0)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"Search auction is not found");
             }
@@ -173,13 +179,13 @@ namespace AuctionService.Services
 
         public async Task UpdateAuction(int id, UpdateAuctionDto updateAuctionDto)
         {
-            if(id != updateAuctionDto.AuctionId)
+            if (id != updateAuctionDto.AuctionId)
             {
                 throw new MyException((int)HttpStatusCode.Conflict, "There are something conflict with auctionId.");
             }
 
             var isAuctionExist = _repository.HasAuction(id);
-            if(!isAuctionExist)
+            if (!isAuctionExist)
             {
                 throw new MyException((int)HttpStatusCode.NotFound, $"Can not find auction has id: {id}");
             }
@@ -193,8 +199,8 @@ namespace AuctionService.Services
             auction.Status = updateAuctionDto.Status;
             auction.ReservePrice = updateAuctionDto.ReservePrice;
             auction.UpdateAt = DateTime.UtcNow;
-            
-            if(auction.Status != Status.InActive)
+
+            if (auction.Status != Status.InActive)
             {
                 auction.StartDateTime = updateAuctionDto.StartDateTime;
                 auction.EndDateTime = updateAuctionDto.EndDateTime;
@@ -228,5 +234,30 @@ namespace AuctionService.Services
             await _repository.UpdateListAuctionAsync(livingAuctions);
         }
 
+        public async Task<List<AuctionDto>> GetAuctionsOfWinner(string winner)
+        {
+            var auctions = await _repository.GetAuctionsOfWinner(winner);
+
+            if (auctions == null || auctions.Count <= 0)
+            {
+                return new List<AuctionDto>();
+            }
+
+            return _mapper.Map<List<AuctionDto>>(auctions);
+        }
+
+        public async Task<DashboardCountDto> GetDashboardCount()
+        {
+            var totalLiving = await _repository.GetNumberLiving();
+            var totalMoney = await _repository.GetTotalMoney();
+            var totalFinished = await _repository.GetNumberFinished();
+
+            return new DashboardCountDto
+            {
+                TotalFinished = totalFinished,
+                TotalLive = totalLiving,
+                TotalMoney = totalMoney
+            };
+        }
     }
 }

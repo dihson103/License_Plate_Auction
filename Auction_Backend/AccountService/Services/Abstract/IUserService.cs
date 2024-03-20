@@ -14,5 +14,6 @@ namespace AccountService.Services.Abstract
         Task<UserDto> Register(RegisterUserDto userDto);
         Task UpdateUser(string id, UpdateUserRequest updateUserRequest);
         Task Recharge(RechargeRequested rechargeRequest);
+        Task<CountUserDto> GetUsersCount();
     }
 }

@@ -9,9 +9,11 @@ import {
 } from '@/types/admins.type'
 import { baseUrl, fetchApi } from './utils.action'
 import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 
 export const getAdmins = (searchParam: AdminSearchParam): Promise<AdminsSearchResponse> => {
   const url = `${baseUrl}/admins?SearchValue=${searchParam.searchValue || ''}&PageIndex=${searchParam.pageIndex || 1}&PageSize=${searchParam.pageSize || 4}`
+  console.log(cookies().get('test-auth')?.value)
   return fetchApi<AdminsSearchResponse>(url, null, 'GET')
 }
 

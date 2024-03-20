@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiddingService", "BiddingService\BiddingService.csproj", "{F3B01910-DC96-4BB7-B65B-FAEE5B622C83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "NotificationService\NotificationService.csproj", "{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "NotificationService\NotificationService.csproj", "{65E8C6F7-CE4B-4679-BE7E-293B08587BD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

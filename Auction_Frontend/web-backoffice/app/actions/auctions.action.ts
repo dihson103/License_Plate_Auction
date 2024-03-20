@@ -1,6 +1,6 @@
 'use server'
 
-import { AuctionSearchParam, CreateAuction, SearchResponse, UpdateAuction } from '@/types/auctions.type'
+import { AuctionSearchParam, CardAuction, CreateAuction, SearchResponse, UpdateAuction } from '@/types/auctions.type'
 import { baseUrl, fetchApi } from './utils.action'
 import { revalidatePath } from 'next/cache'
 import { convertAuctionStatusToNumber } from '../utils/utils'
@@ -24,4 +24,9 @@ export const createAuction = (auction: CreateAuction) => {
   const result = fetchApi(url, bodyJson, 'POST')
   revalidatePath('/auctions')
   return result
+}
+
+export const getAuctionCardInformation = () => {
+  const url = `${baseUrl}/auctions/dashboard`
+  return fetchApi<CardAuction>(url, null, 'GET')
 }

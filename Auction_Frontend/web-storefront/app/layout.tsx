@@ -3,7 +3,7 @@ import './globals.css'
 import { ThemeModeScript } from 'flowbite-react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import SignalrProvider from './providers/SignalrProvider'
+import SignalrProvider from './providers/SignalRProvider'
 
 export const metadata: Metadata = {
   title: 'Lisence auction',

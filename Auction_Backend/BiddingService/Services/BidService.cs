@@ -18,21 +18,24 @@ public class BidService : IBidService
     private readonly IMapper _mapper;
     private readonly IRedisService _redisService;
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly GrpcAuctionClient _grpcClient;
+    private readonly GrpcAuctionClient _grpcAuctionClient;
+    private readonly GrpcUserClient _grpcUserClient;
 
     public BidService(
         IBiddingRepository repository,  
         IMapper mapper, 
         IRedisService redisService,
         IPublishEndpoint publishEndpoint,
-        GrpcAuctionClient grpcClient
+        GrpcAuctionClient grpcClient,
+        GrpcUserClient grpcUserClient
         )
     {
         _repository = repository;
         _mapper = mapper;
         _redisService = redisService;
         _publishEndpoint = publishEndpoint;
-        _grpcClient = grpcClient;
+        _grpcAuctionClient = grpcClient;
+        _grpcUserClient = grpcUserClient;
     }
 
     public async Task Bid(string userId, string fullName, BidRequest bidRequest)
@@ -77,6 +80,14 @@ public class BidService : IBidService
             throw new BidAmountIsTooLowException();
         }
 
+        var user = await _grpcUserClient.GetUser(bidRequest.UserId) ??
+            throw new UserNotFoundException();
+
+        if((double) bidRequest.BidAmount > user.Wallet)
+        {
+            throw new UserDoNotHaveEnoughMoneyException();
+        }
+
         var highestAmount = await _repository.GetHighestAmount(bidRequest.AuctionId);
         
         if(bidRequest.BidAmount <= highestAmount)
@@ -99,7 +110,7 @@ public class BidService : IBidService
             }
         }
         //call to auction service by grpc to get auction
-        var auction = _grpcClient.GetAuction(auctionId);
+        var auction = await _grpcAuctionClient.GetAuction(auctionId);
 
         return auction;
     }

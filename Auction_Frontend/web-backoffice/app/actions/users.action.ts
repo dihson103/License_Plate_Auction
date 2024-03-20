@@ -1,6 +1,6 @@
 'use server'
 
-import { SearchUserResponse, UpdateUserStats, UserResponse, UserSearchParams } from '@/types/users.type'
+import { SearchUserResponse, UpdateUserStats, UserCount, UserResponse, UserSearchParams } from '@/types/users.type'
 import { baseUrl, fetchApi } from './utils.action'
 import { revalidatePath } from 'next/cache'
 import { CreateUserFormSchema, UpdateUserFormSchema } from '../rules/users.rule'
@@ -32,4 +32,9 @@ export const updateUser = (user: UpdateUserFormSchema) => {
   const result = fetchApi(url, bodyJson, 'PUT')
   revalidatePath('/users')
   return result
+}
+
+export const countUsers = () => {
+  const url = `${baseUrl}/users/count`
+  return fetchApi<UserCount>(url, null, 'GET')
 }

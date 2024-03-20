@@ -13,5 +13,7 @@ namespace AuctionService.Services.Abstract
         Task<AuctionSearchResponse> SearchAuction(AuctionSearchParams searchParams);
         Task UpdateStatusOfListAuctionToLive(List<RedisAuctionDto> redisAuctionDtos);
         Task CheckAuctionStatusToChangeToLive();
+        Task<List<AuctionDto>> GetAuctionsOfWinner(string winner);
+        Task<DashboardCountDto> GetDashboardCount();
     }
 }

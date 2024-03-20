@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import { UserResponse } from './user.type'
 
-type AuthResponse = {
+export type AuthResponse = {
   data: UserResponse
   accessToken: string
   refreshToken: string

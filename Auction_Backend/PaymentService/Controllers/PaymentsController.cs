@@ -18,8 +18,7 @@ namespace PaymentService.Controllers
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] UserGetPaymentRequest searchRequest)
         {
-            //var userId = HttpContext.Request.Headers["User-Id"];
-            var userId = "HE160021";
+            var userId = HttpContext.Request.Headers["User-Id"];
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -33,8 +32,8 @@ namespace PaymentService.Controllers
         [HttpPost]
         public async Task<IActionResult> Pay([FromBody] PaymentRequest paymentRequest)
         {
-            //var userId = HttpContext.Request.Headers["User-Id"];
-            var userId = "HE160021";
+            var userId = HttpContext.Request.Headers["User-Id"];
+            //var userId = "HE160021";
 
             if (string.IsNullOrEmpty(userId))
             {

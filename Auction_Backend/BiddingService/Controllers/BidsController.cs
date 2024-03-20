@@ -18,9 +18,12 @@ namespace BiddingService.Controllers
         [HttpPost]
         public async Task<IActionResult> Bid([FromBody] BidRequest bidRequest)
         {
-            //var userId = HttpContext.Request.Headers["User-Id"];
-            var userId = "HE160021";
-            var fullName = "Nguyen Dinh Son";
+            var userId = HttpContext.Request.Headers["User-Id"]; 
+            var fullNameBase64 = HttpContext.Request.Headers["User-FullName"]; // Assuming it's base64 encoded
+
+            // Decode the Base64-encoded full name and convert it back to UTF-8
+            var fullNameBytes = System.Convert.FromBase64String(fullNameBase64);
+            var fullName = System.Text.Encoding.UTF8.GetString(fullNameBytes);
             await _bidService.Bid(userId, fullName, bidRequest);
             return NoContent();
         }

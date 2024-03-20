@@ -49,5 +49,12 @@ namespace AccountService.Controllers
 
             return Ok();
         }
+
+        [HttpGet("admin")]
+        [RequireAdmin]
+        public IActionResult Test()
+        {
+            return Ok("Test ok");
+        }
     }
 }

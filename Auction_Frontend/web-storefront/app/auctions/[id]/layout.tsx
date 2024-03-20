@@ -1,10 +1,7 @@
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Auction',
-  description: 'Auction Detail'
-}
+import { SessionProvider } from 'next-auth/react'
 
 export default function AuctionLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+  return <SessionProvider>{children}</SessionProvider>
 }

@@ -42,3 +42,7 @@ export type UpdateUserStats = {
   id: string
   status: boolean
 }
+
+export type UserCount = {
+  totalUsers: number
+}

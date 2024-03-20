@@ -51,7 +51,7 @@ export default function ItemListing({ searchParams }: Props) {
         {isNotFound && <h3>Not Found</h3>}
       </div>
       <div>
-        <AppPagination pageIndex={pageIndex} totalPages={totalPages} setPageIndex={setPageIndex} />
+        {!isNotFound && <AppPagination pageIndex={pageIndex} totalPages={totalPages} setPageIndex={setPageIndex} />}
       </div>
     </>
   )

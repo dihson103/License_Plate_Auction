@@ -1,43 +1,42 @@
 ﻿using BiddingService.Dtos.Redis;
 using Grpc.Net.Client;
 
-namespace BiddingService.Services
+namespace BiddingService.Services;
+
+public class GrpcAuctionClient
 {
-    public class GrpcAuctionClient
+    private readonly IConfiguration _configuration;
+
+    public GrpcAuctionClient(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public GrpcAuctionClient(IConfiguration configuration)
+    public async Task<RedisAuctionDto?> GetAuction(int id)
+    {
+        Console.WriteLine("===> Calling grpc auction");
+
+        var channel = GrpcChannel.ForAddress(_configuration["GrpcAuction"]);
+        var client = new GrpcAuction.GrpcAuctionClient(channel);
+        var request = new GetAuctionRequest { Id = id };
+
+        try
         {
-            _configuration = configuration;
-        }
+            var reply = await client.GetAuctionAsync(request);
+            var auction = new RedisAuctionDto
+            {
+                Id = reply.Data.Id,
+                StartDateTime = DateTime.Parse(reply.Data.StartDateTime),
+                EndDateTime = DateTime.Parse(reply.Data.EndDateTime),
+                Status = reply.Data.Status,
+                ReservePrice = reply.Data.ReservePrice
+            };
 
-        public RedisAuctionDto? GetAuction(int id)
+            return auction;
+        }catch(Exception ex)
         {
-            Console.WriteLine("===> Calling grpc auction");
-
-            var channel = GrpcChannel.ForAddress(_configuration["GrpcAuction"]);
-            var client = new GrpcAuction.GrpcAuctionClient(channel);
-            var request = new GetAuctionRequest { Id = id };
-
-            try
-            {
-                var reply = client.GetAuction(request);
-                var auction = new RedisAuctionDto
-                {
-                    Id = reply.Data.Id,
-                    StartDateTime = DateTime.Parse(reply.Data.StartDateTime),
-                    EndDateTime = DateTime.Parse(reply.Data.EndDateTime),
-                    Status = reply.Data.Status,
-                    ReservePrice = reply.Data.ReservePrice
-                };
-
-                return auction;
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
+            Console.WriteLine(ex.ToString());
+            return null;
         }
     }
 }

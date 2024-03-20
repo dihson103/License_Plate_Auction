@@ -62,6 +62,12 @@ namespace AccountService.Services
             return _mapper.Map<UserDto>(user);
         }
 
+        public async Task<CountUserDto> GetUsersCount()
+        {
+            var totalUsers = await _userRepository.GetTotalUsers();
+            return new CountUserDto { TotalUsers = totalUsers };
+        }
+
         public async Task Recharge(RechargeRequested rechargeRequest)
         {
             var user = await getUserById(rechargeRequest.UserId);

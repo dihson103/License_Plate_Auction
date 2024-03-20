@@ -6,6 +6,7 @@ using RedisManager;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace JwtAuthenticationManager.Middlewares
 {
@@ -48,8 +49,10 @@ namespace JwtAuthenticationManager.Middlewares
             {
                 var principal = tokenService.GetClaimsPrincipal(token, publicKey);
                 var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var role = principal.FindFirst(ClaimTypes.Role)?.Value;
+                var fullName = principal.FindFirst("User-FullName")?.Value;
 
-                if(string.IsNullOrEmpty(userId))
+                if (string.IsNullOrEmpty(userId))
                 {
                     context.Response.StatusCode = 401;
                     return;
@@ -70,9 +73,12 @@ namespace JwtAuthenticationManager.Middlewares
                     return;
                 }
 
-                context.User = principal;
+                var fullNameBytes = Encoding.UTF8.GetBytes(fullName);
+                var encodedFullName = Convert.ToBase64String(fullNameBytes);
 
                 context.Request.Headers.Add("User-Id", userId);
+                context.Request.Headers.Add("User-Role", role);
+                context.Request.Headers.Add("User-FullName", encodedFullName);
 
                 await _next(context);
             }

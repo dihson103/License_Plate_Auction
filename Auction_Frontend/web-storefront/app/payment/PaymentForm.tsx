@@ -9,9 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-toastify'
 import { payAPI } from '../actions/payment.actions'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function PaymentForm() {
   const router = useRouter()
+  const { data: session } = useSession()
 
   const {
     register,
@@ -27,7 +29,8 @@ export default function PaymentForm() {
   }, [setValue])
 
   const handlePay = handleSubmit((data) => {
-    payAPI(data)
+    if (!session?.user) return
+    payAPI(data, session?.user)
       .then(() => {
         router.push('/')
         toast.success('Payment request sent successfully')

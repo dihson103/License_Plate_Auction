@@ -106,7 +106,8 @@ namespace AccountService.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim("Email", user.Email),
-                new Claim(ClaimTypes.Role, "USER")
+                new Claim(ClaimTypes.Role, "USER"),
+                new Claim("User-FullName", user.FullName)
             };
 
             var tokenGenerated = await createTokensAsync(claims, user.Id);
