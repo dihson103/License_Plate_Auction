@@ -3,6 +3,7 @@ import React from 'react'
 import UpdateAuctionButton from './UpdateAuctionButton'
 import ChangeStatusButton from './ChangeStatusButton'
 import { convertNumberToVietNamMoney, convertUTCtoLocalDateTime } from '@/app/utils/utils'
+import ReceivedButton from './ReceivedButton'
 
 type props = {
   auction: AuctionResponse
@@ -32,6 +33,7 @@ export default function AuctionRow({ auction }: props) {
       <td className='flex p-4 space-x-2 whitespace-nowrap'>
         <ChangeStatusButton auction={auction} />
         <UpdateAuctionButton auction={auction} />
+        {auction.status === 'Finished' && <ReceivedButton auctionId={auction.id} />}
       </td>
     </tr>
   )

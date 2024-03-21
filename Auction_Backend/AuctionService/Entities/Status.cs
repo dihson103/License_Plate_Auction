@@ -6,6 +6,7 @@
         Pending,
         Live,
         Finished,
-        ReserveNotMet
+        ReserveNotMet,
+        Received
     }
 }

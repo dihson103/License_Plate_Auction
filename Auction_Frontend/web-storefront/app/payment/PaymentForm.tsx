@@ -25,8 +25,8 @@ export default function PaymentForm() {
   })
 
   useEffect(() => {
-    setValue('userId', 'HE160021')
-  }, [setValue])
+    setValue('userId', session?.user.data.id || '')
+  }, [setValue, session?.user.data.id])
 
   const handlePay = handleSubmit((data) => {
     if (!session?.user) return

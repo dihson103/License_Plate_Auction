@@ -13,6 +13,7 @@ namespace NotificationService
             builder.Services.AddMassTransit(x =>
             {
                 x.AddConsumersFromNamespaceContaining<BidPlacedConsumer>();
+                x.AddConsumersFromNamespaceContaining<RechargeRequestedConsumer>();
 
                 x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("notification", false));
 

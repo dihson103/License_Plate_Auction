@@ -184,6 +184,12 @@ namespace AuctionService.Services
                 throw new MyException((int)HttpStatusCode.Conflict, "There are something conflict with auctionId.");
             }
 
+            var isItemExist = await _repository.IsLisensePlateExist(updateAuctionDto.LicensePlate);
+            if (isItemExist)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, $"Item is already exist");
+            }
+
             var isAuctionExist = _repository.HasAuction(id);
             if (!isAuctionExist)
             {
@@ -258,6 +264,25 @@ namespace AuctionService.Services
                 TotalLive = totalLiving,
                 TotalMoney = totalMoney
             };
+        }
+
+        public async Task ChangeToReceivedStatus(int id)
+        {
+            var auction = await _repository.GetByIdAsync(id);
+
+            if (auction == null)
+            {
+                throw new MyException((int)HttpStatusCode.NotFound, "Auction is not found");
+            }
+
+            if(auction.Status != Status.Finished)
+            {
+                throw new MyException((int)HttpStatusCode.BadRequest, "Auction is not in finished status");
+            }
+
+            auction.Status = Status.Received;
+
+            await _repository.UpdateAuctionAsync(auction);    
         }
     }
 }

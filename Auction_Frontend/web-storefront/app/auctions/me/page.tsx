@@ -35,6 +35,7 @@ export default function MyAuctionPage() {
           <TableHeadCell>Kind of car</TableHeadCell>
           <TableHeadCell>License type</TableHeadCell>
           <TableHeadCell>Price</TableHeadCell>
+          <TableHeadCell>Staus</TableHeadCell>
           <TableHeadCell>
             <span className='sr-only'>View</span>
           </TableHeadCell>
@@ -42,25 +43,21 @@ export default function MyAuctionPage() {
         <TableBody className='divide-y'>
           {auctions &&
             auctions.map((auction) => (
-              <>
-                <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <TableCell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
-                    {auction.licensePlate}
-                  </TableCell>
-                  <TableCell>{auction.city}</TableCell>
-                  <TableCell>{auction.kindOfCar}</TableCell>
-                  <TableCell>{auction.licenseType}</TableCell>
-                  <TableCell>{convertNumberToVietNamMoney(auction.currentHighBid ?? 0)}</TableCell>
-                  <TableCell>
-                    <Link
-                      href={`${auction.id}`}
-                      className='font-medium text-cyan-600 hover:underline dark:text-cyan-500'
-                    >
-                      {"View auction's detail"}
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              </>
+              <TableRow key={auction.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <TableCell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
+                  {auction.licensePlate}
+                </TableCell>
+                <TableCell>{auction.city}</TableCell>
+                <TableCell>{auction.kindOfCar}</TableCell>
+                <TableCell>{auction.licenseType}</TableCell>
+                <TableCell>{convertNumberToVietNamMoney(auction.currentHighBid ?? 0)}</TableCell>
+                <TableCell>{auction.status}</TableCell>
+                <TableCell>
+                  <Link href={`${auction.id}`} className='font-medium text-cyan-600 hover:underline dark:text-cyan-500'>
+                    {"View auction's detail"}
+                  </Link>
+                </TableCell>
+              </TableRow>
             ))}
         </TableBody>
       </Table>

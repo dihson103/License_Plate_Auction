@@ -30,3 +30,10 @@ export const getAuctionCardInformation = () => {
   const url = `${baseUrl}/auctions/dashboard`
   return fetchApi<CardAuction>(url, null, 'GET')
 }
+
+export const updateStatusToReceived = (id: number) => {
+  const url = `${baseUrl}/auctions/${id}`
+  const result = fetchApi(url, null, 'PATCH')
+  revalidatePath('/auctions')
+  return result
+}

@@ -15,5 +15,6 @@ namespace AuctionService.Services.Abstract
         Task CheckAuctionStatusToChangeToLive();
         Task<List<AuctionDto>> GetAuctionsOfWinner(string winner);
         Task<DashboardCountDto> GetDashboardCount();
+        Task ChangeToReceivedStatus(int id);
     }
 }

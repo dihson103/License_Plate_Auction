@@ -71,5 +71,13 @@ namespace AuctionService.Controllers
             var result = await _auctionService.GetDashboardCount();
             return Ok(result);
         }
+
+
+        [HttpPatch("{auctionId}")]
+        public async Task<IActionResult> updateToReceived([FromRoute] int auctionId)
+        {
+            await _auctionService.ChangeToReceivedStatus(auctionId);
+            return NoContent();
+        }
     }
 }
