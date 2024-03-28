@@ -26,6 +26,7 @@ export default function BidList({ startingPrice, auctionId, isLive }: Props) {
         setBids(data)
       })
       .catch((error: Error) => {
+        console.log('error', error)
         toast.error(error.message)
       })
       .finally(() => {

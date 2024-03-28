@@ -3,9 +3,7 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { ReactNode, useEffect, useState } from 'react'
 import { useBidsStore } from '../hooks/useBidsStore'
-import { baseUrl } from '../actions/utils.action'
 import { BidResponse } from '../types/bid.type'
-import { useSession } from 'next-auth/react'
 import { useWallet } from '../hooks/useWallet'
 import { PaymentSignlr } from '../types/payment.type'
 
@@ -21,7 +19,7 @@ export default function SignalrProvider({ children }: Props) {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl(`${baseUrl}/notifications`)
+      .withUrl(process.env.NEXT_PUBLIC_NOTIFICATION_API_URL!)
       .withAutomaticReconnect()
       .build()
     setConnection(newConnection)

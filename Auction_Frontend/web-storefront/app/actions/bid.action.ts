@@ -1,3 +1,5 @@
+'use server'
+
 import { AuthResponse } from '../types/auth.type'
 import { BidRequest, BidResponse } from '../types/bid.type'
 import { baseUrl, fetchApi, fetchApiWithOutCache } from './utils.action'

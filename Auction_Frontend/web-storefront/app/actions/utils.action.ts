@@ -1,4 +1,3 @@
-import { url } from 'inspector'
 import { ApiError, ProvinceResponse } from '../types/util.type'
 import { AuthResponse } from '../types/auth.type'
 
@@ -7,8 +6,6 @@ export const getProvinces = async (): Promise<ProvinceResponse> => {
   if (!result.ok) throw new Error('Failed to fetch data')
   return result.json()
 }
-
-const getUserInformationFromSession = () => {}
 
 export const fetchApi = async <T>(
   url: string,
@@ -49,7 +46,7 @@ export const fetchApi = async <T>(
   return jsonData as T
 }
 
-export const baseUrl = 'http://localhost:6001'
+export const baseUrl = process.env.BASE_API_URL!
 
 export const fetchApiWithOutCache = async <T>(url: string) => {
   const result = await fetch(url, { cache: 'no-cache' })

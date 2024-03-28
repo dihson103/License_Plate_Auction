@@ -140,8 +140,8 @@ services:
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgres;Database=biddings
       - ConnectionStrings__Redis=http://redis
-      - GrpcAuction=http://localhost:7777
-      - GrpcUser=http://localhost:7788
+      - GrpcAuction=http://auction-svc:7777
+      - GrpcUser=http://account-svc:7788
     ports:
       - 7005:80
     depends_on:
@@ -197,14 +197,28 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
-      - ELKConfiguraion__Uri=http://elasticsearch
+      - ELKConfiguraion__Uri=http://elasticsearch:9200
       - ELKConfiguraion__index=auctions
-      - AuctionServiceUrl=http://localhost:7001
+      - AuctionServiceUrl=http://auction-svc:7001
     ports:
       - 7002:80
     depends_on:
       - rabbitmq
       - elasticsearch
+    networks:
+      - backend
+
+  gateway-svc:
+    image: dihson103/gateway-svc:latest
+    container_name: gateway-svc
+    build:
+      context: .
+      dockerfile: Auction_Backend/GatewayService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 6001:80
     networks:
       - backend
 
